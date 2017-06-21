@@ -1,0 +1,34 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E - FutureTuition.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+</style>
+</head>
+<body>
+<form action = "FutureTuitionWithLineNumber.html" method = "get">
+<input type = "submit" value = "Show Code With Line Numbers" />
+</form>
+<pre>
+<span class = "keyword">public</span> <span class = "keyword">class</span> FutureTuition {
+  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) { 
+    <span class = "keyword">double</span> tuition = <span class = "literal">10000</span>;   <span class = "comment">// Year 0</span>
+    <span class = "keyword">int</span> year = <span class = "literal">0</span>;
+    <span class = "keyword">while</span> (tuition &lt; <span class = "literal">40000</span>) {
+      tuition = tuition * <span class = "literal">1</span>.<span class = "literal">07</span>;
+      year++;
+    }
+  
+    System.out.println(<span class = "literal">"Tuition will be doubled in "</span> 
+      + year + <span class = "literal">" years"</span>);
+    System.out.printf(<span class = "literal">"Tuition will be $%.2f in %1d years"</span>,  
+      tuition, year);
+  }
+}
+</pre>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E - TestArrayAndLinkedList.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+</style>
+</head>
+<body>
+<form action = "TestArrayAndLinkedListWithLineNumber.html" method = "get">
+<input type = "submit" value = "Show Code With Line Numbers" />
+</form>
+<pre>
+<span class = "keyword">import</span> java.util.*;
+
+<span class = "keyword">public</span> <span class = "keyword">class</span> TestArrayAndLinkedList {
+  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+    List&lt;Integer&gt; arrayList = <span class = "keyword">new</span> ArrayList&lt;Integer&gt;();
+    arrayList.add(<span class = "literal">1</span>); <span class = "comment">// 1 is autoboxed to new Integer(1)</span>
+    arrayList.add(<span class = "literal">2</span>);
+    arrayList.add(<span class = "literal">3</span>);
+    arrayList.add(<span class = "literal">1</span>);
+    arrayList.add(<span class = "literal">4</span>);
+    arrayList.add(<span class = "literal">0</span>, <span class = "literal">10</span>);
+    arrayList.add(<span class = "literal">3</span>, <span class = "literal">30</span>);
+
+    System.out.println(<span class = "literal">"A list of integers in the array list:"</span>);
+    System.out.println(arrayList);
+
+    LinkedList&lt;Object&gt; linkedList = <span class = "keyword">new</span> LinkedList&lt;Object&gt;(arrayList);
+    linkedList.add(<span class = "literal">1</span>, <span class = "literal">"red"</span>);
+    linkedList.removeLast();
+    linkedList.addFirst(<span class = "literal">"green"</span>);
+
+    System.out.println(<span class = "literal">"Display the linked list backward:"</span>);
+    <span class = "keyword">for</span> (<span class = "keyword">int</span> i = linkedList.size() - <span class = "literal">1</span>; i &gt;= <span class = "literal">0</span>; i--) {
+      System.out.print(linkedList.get(i) + <span class = "literal">" "</span>);
+    }
+  }
+}
+</pre>
+</body>
+</html>

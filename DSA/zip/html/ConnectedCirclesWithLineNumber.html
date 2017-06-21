@@ -1,0 +1,130 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - ConnectedCircles.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "ConnectedCircles.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.util.List;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.util.ArrayList;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  4&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  5&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.*;
+  6&nbsp;&nbsp;
+  7&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> ConnectedCircles <span class = "keyword">extends</span> JApplet {
+  8&nbsp;&nbsp;  <span class = "comment">// Circles are stored in a list</span>
+  9&nbsp;&nbsp;  <span class = "keyword">private</span> List&lt;Circle&gt; circles = <span class = "keyword">new</span> ArrayList&lt;Circle&gt;();
+ 10&nbsp;&nbsp;
+ 11&nbsp;&nbsp;  <span class = "keyword">public</span> ConnectedCircles() {
+ 12&nbsp;&nbsp;    add(<span class = "keyword">new</span> CirclePanel()); <span class = "comment">// Add to circle panel to applet</span>
+ 13&nbsp;&nbsp;  }
+ 14&nbsp;&nbsp;
+ 15&nbsp;&nbsp;  <span class = "comment">/** Panel for displaying circles */</span>
+ 16&nbsp;&nbsp;  <span class = "keyword">class</span> CirclePanel <span class = "keyword">extends</span> JPanel {
+ 17&nbsp;&nbsp;    <span class = "keyword">public</span> CirclePanel() {
+ 18&nbsp;&nbsp;      addMouseListener(<span class = "keyword">new</span> MouseAdapter() {
+ 19&nbsp;&nbsp;        @Override
+ 20&nbsp;&nbsp;        <span class = "keyword">public</span> <span class = "keyword">void</span> mouseClicked(MouseEvent e) {
+ 21&nbsp;&nbsp;          <span class = "keyword">if</span> (!isInsideACircle(e.getPoint())) { <span class = "comment">// Add a new circle</span>
+ 22&nbsp;&nbsp;            circles.add(<span class = "keyword">new</span> Circle(e.getX(), e.getY()));
+ 23&nbsp;&nbsp;            repaint();
+ 24&nbsp;&nbsp;          }
+ 25&nbsp;&nbsp;        }
+ 26&nbsp;&nbsp;      });
+ 27&nbsp;&nbsp;    }
+ 28&nbsp;&nbsp;
+ 29&nbsp;&nbsp;    <span class = "comment">/** Returns true if the point is inside an existing circle */</span>
+ 30&nbsp;&nbsp;    <span class = "keyword">private</span> <span class = "keyword">boolean</span> isInsideACircle(Point p) {
+ 31&nbsp;&nbsp;      <span class = "keyword">for</span> (Circle circle: circles)
+ 32&nbsp;&nbsp;        <span class = "keyword">if</span> (circle.contains(p))
+ 33&nbsp;&nbsp;          <span class = "keyword">return</span> <span class = "keyword">true</span>;
+ 34&nbsp;&nbsp;
+ 35&nbsp;&nbsp;      <span class = "keyword">return</span> <span class = "keyword">false</span>;
+ 36&nbsp;&nbsp;    }
+ 37&nbsp;&nbsp;
+ 38&nbsp;&nbsp;    @Override
+ 39&nbsp;&nbsp;    <span class = "keyword">protected</span> <span class = "keyword">void</span> paintComponent(Graphics g) {
+ 40&nbsp;&nbsp;      <span class = "keyword">if</span> (circles.size() == <span class = "literal">0</span>)
+ 41&nbsp;&nbsp;        <span class = "keyword">return</span>; <span class = "comment">// Nothing to paint</span>
+ 42&nbsp;&nbsp;
+ 43&nbsp;&nbsp;      <span class = "keyword">super</span>.paintComponent(g);
+ 44&nbsp;&nbsp;
+ 45&nbsp;&nbsp;      <span class = "comment">// Build the edges</span>
+ 46&nbsp;&nbsp;      List&lt;AbstractGraph.Edge&gt; edges 
+ 47&nbsp;&nbsp;        = <span class = "keyword">new</span> ArrayList&lt;AbstractGraph.Edge&gt;();
+ 48&nbsp;&nbsp;      <span class = "keyword">for</span> (<span class = "keyword">int</span> i = <span class = "literal">0</span>; i &lt; circles.size(); i++)
+ 49&nbsp;&nbsp;        <span class = "keyword">for</span> (<span class = "keyword">int</span> j = i + <span class = "literal">1</span>; j &lt; circles.size(); j++)
+ 50&nbsp;&nbsp;          <span class = "keyword">if</span> (circles.get(i).overlaps(circles.get(j))) {
+ 51&nbsp;&nbsp;            edges.add(<span class = "keyword">new</span> AbstractGraph.Edge(i, j));
+ 52&nbsp;&nbsp;            edges.add(<span class = "keyword">new</span> AbstractGraph.Edge(j, i));
+ 53&nbsp;&nbsp;          }
+ 54&nbsp;&nbsp;
+ 55&nbsp;&nbsp;      <span class = "comment">// Create a graph with circles as vertices</span>
+ 56&nbsp;&nbsp;      Graph&lt;Circle&gt; graph 
+ 57&nbsp;&nbsp;        = <span class = "keyword">new</span> UnweightedGraph&lt;Circle&gt;(edges, circles);
+ 58&nbsp;&nbsp;      AbstractGraph&lt;Circle&gt;.Tree tree = graph.dfs(<span class = "literal">0</span>); <span class = "comment">// a DFS tree</span>
+ 59&nbsp;&nbsp;      <span class = "keyword">boolean</span> isAllCirclesConnected = circles.size() == tree
+ 60&nbsp;&nbsp;          .getNumberOfVerticesFound();
+ 61&nbsp;&nbsp;
+ 62&nbsp;&nbsp;      <span class = "keyword">for</span> (Circle circle : circles) {
+ 63&nbsp;&nbsp;        <span class = "keyword">int</span> radius = circle.radius;
+ 64&nbsp;&nbsp;        <span class = "keyword">if</span> (isAllCirclesConnected) { <span class = "comment">// All circles are connected</span>
+ 65&nbsp;&nbsp;          g.setColor(Color.RED);
+ 66&nbsp;&nbsp;          g.fillOval(circle.x - radius, circle.y - radius, 
+ 67&nbsp;&nbsp;            <span class = "literal">2</span> * radius, <span class = "literal">2</span> * radius);
+ 68&nbsp;&nbsp;        } <span class = "keyword">else</span>
+ 69&nbsp;&nbsp;          <span class = "comment">// circles are not all connected</span>
+ 70&nbsp;&nbsp;          g.drawOval(circle.x - radius, circle.y - radius, 
+ 71&nbsp;&nbsp;            <span class = "literal">2</span> * radius, <span class = "literal">2</span> * radius);
+ 72&nbsp;&nbsp;      }
+ 73&nbsp;&nbsp;    }
+ 74&nbsp;&nbsp;  }
+ 75&nbsp;&nbsp;
+ 76&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">static</span> <span class = "keyword">class</span> Circle {
+ 77&nbsp;&nbsp;    <span class = "keyword">int</span> radius = <span class = "literal">20</span>;
+ 78&nbsp;&nbsp;    <span class = "keyword">int</span> x, y;
+ 79&nbsp;&nbsp;
+ 80&nbsp;&nbsp;    Circle(<span class = "keyword">int</span> x, <span class = "keyword">int</span> y) {
+ 81&nbsp;&nbsp;      <span class = "keyword">this</span>.x = x;
+ 82&nbsp;&nbsp;      <span class = "keyword">this</span>.y = y;
+ 83&nbsp;&nbsp;    }
+ 84&nbsp;&nbsp;
+ 85&nbsp;&nbsp;    <span class = "keyword">public</span> <span class = "keyword">boolean</span> contains(Point p) {
+ 86&nbsp;&nbsp;      <span class = "keyword">double</span> d = distance(x, y, p.x, p.y);
+ 87&nbsp;&nbsp;      <span class = "keyword">return</span> d &lt;= radius;
+ 88&nbsp;&nbsp;    }
+ 89&nbsp;&nbsp;
+ 90&nbsp;&nbsp;    <span class = "keyword">public</span> <span class = "keyword">boolean</span> overlaps(Circle circle) {
+ 91&nbsp;&nbsp;      <span class = "keyword">return</span> distance(<span class = "keyword">this</span>.x, <span class = "keyword">this</span>.y, circle.x, circle.y) &lt;= radius
+ 92&nbsp;&nbsp;        + circle.radius;
+ 93&nbsp;&nbsp;    }
+ 94&nbsp;&nbsp;
+ 95&nbsp;&nbsp;    <span class = "keyword">private</span> <span class = "keyword">static</span> <span class = "keyword">double</span> distance(<span class = "keyword">int</span> x1, <span class = "keyword">int</span> y1, <span class = "keyword">int</span> x2, <span class = "keyword">int</span> y2) {
+ 96&nbsp;&nbsp;      <span class = "keyword">return</span> Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+ 97&nbsp;&nbsp;    }
+ 98&nbsp;&nbsp;  }
+ 99&nbsp;&nbsp;
+100&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+101&nbsp;&nbsp;    JFrame frame = <span class = "keyword">new</span> JFrame();
+102&nbsp;&nbsp;    JApplet applet = <span class = "keyword">new</span> ConnectedCircles();
+103&nbsp;&nbsp;    frame.add(applet);
+104&nbsp;&nbsp;    frame.setTitle(<span class = "literal">"ConnectedCircles"</span>);
+105&nbsp;&nbsp;    frame.setLocationRelativeTo(<span class = "keyword">null</span>);
+106&nbsp;&nbsp;    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+107&nbsp;&nbsp;    frame.setSize(<span class = "literal">400</span>, <span class = "literal">300</span>);
+108&nbsp;&nbsp;    frame.setVisible(<span class = "keyword">true</span>);
+109&nbsp;&nbsp;  }
+110&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

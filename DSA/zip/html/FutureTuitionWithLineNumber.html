@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - FutureTuition.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "FutureTuition.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> FutureTuition {
+  2&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) { 
+  3&nbsp;&nbsp;    <span class = "keyword">double</span> tuition = <span class = "literal">10000</span>;   <span class = "comment">// Year 0</span>
+  4&nbsp;&nbsp;    <span class = "keyword">int</span> year = <span class = "literal">0</span>;
+  5&nbsp;&nbsp;    <span class = "keyword">while</span> (tuition &lt; <span class = "literal">40000</span>) {
+  6&nbsp;&nbsp;      tuition = tuition * <span class = "literal">1</span>.<span class = "literal">07</span>;
+  7&nbsp;&nbsp;      year++;
+  8&nbsp;&nbsp;    }
+  9&nbsp;&nbsp;  
+ 10&nbsp;&nbsp;    System.out.println(<span class = "literal">"Tuition will be doubled in "</span> 
+ 11&nbsp;&nbsp;      + year + <span class = "literal">" years"</span>);
+ 12&nbsp;&nbsp;    System.out.printf(<span class = "literal">"Tuition will be $%.2f in %1d years"</span>,  
+ 13&nbsp;&nbsp;      tuition, year);
+ 14&nbsp;&nbsp;  }
+ 15&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

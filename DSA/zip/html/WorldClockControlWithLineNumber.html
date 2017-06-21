@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - WorldClockControl.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "WorldClockControl.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.*;
+  4&nbsp;&nbsp;<span class = "keyword">import</span> java.util.*;
+  5&nbsp;&nbsp;
+  6&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> WorldClockControl <span class = "keyword">extends</span> JPanel {
+  7&nbsp;&nbsp;  <span class = "comment">// Obtain all available locales and time zone ids</span>
+  8&nbsp;&nbsp;  <span class = "keyword">private</span> Locale[] availableLocales = Locale.getAvailableLocales();
+  9&nbsp;&nbsp;  <span class = "keyword">private</span> String[] availableTimeZones = TimeZone.getAvailableIDs();
+ 10&nbsp;&nbsp;
+ 11&nbsp;&nbsp;  <span class = "comment">// Comboxes to display available locales and time zones</span>
+ 12&nbsp;&nbsp;  <span class = "keyword">private</span> JComboBox jcbLocales = <span class = "keyword">new</span> JComboBox();
+ 13&nbsp;&nbsp;  <span class = "keyword">private</span> JComboBox jcbTimeZones = <span class = "keyword">new</span> JComboBox();
+ 14&nbsp;&nbsp;
+ 15&nbsp;&nbsp;  <span class = "comment">// Create a clock</span>
+ 16&nbsp;&nbsp;  <span class = "keyword">private</span> WorldClock clock = <span class = "keyword">new</span> WorldClock();
+ 17&nbsp;&nbsp;
+ 18&nbsp;&nbsp;  <span class = "keyword">public</span> WorldClockControl() {
+ 19&nbsp;&nbsp;    <span class = "comment">// Initialize jcbLocales with all available locales</span>
+ 20&nbsp;&nbsp;    setAvailableLocales();
+ 21&nbsp;&nbsp;
+ 22&nbsp;&nbsp;    <span class = "comment">// Initialize jcbTimeZones with all available time zones</span>
+ 23&nbsp;&nbsp;    setAvailableTimeZones();
+ 24&nbsp;&nbsp;
+ 25&nbsp;&nbsp;    <span class = "comment">// Initialize locale and time zone</span>
+ 26&nbsp;&nbsp;    clock.setLocale(
+ 27&nbsp;&nbsp;      availableLocales[jcbLocales.getSelectedIndex()]);
+ 28&nbsp;&nbsp;    clock.setTimeZone(TimeZone.getTimeZone(
+ 29&nbsp;&nbsp;      availableTimeZones[jcbTimeZones.getSelectedIndex()]));
+ 30&nbsp;&nbsp;
+ 31&nbsp;&nbsp;    JPanel panel1 = <span class = "keyword">new</span> JPanel();
+ 32&nbsp;&nbsp;    panel1.setLayout(<span class = "keyword">new</span> GridLayout(<span class = "literal">2</span>, <span class = "literal">1</span>));
+ 33&nbsp;&nbsp;    panel1.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Locale"</span>));
+ 34&nbsp;&nbsp;    panel1.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Time Zone"</span>));
+ 35&nbsp;&nbsp;    JPanel panel2 = <span class = "keyword">new</span> JPanel();
+ 36&nbsp;&nbsp;
+ 37&nbsp;&nbsp;    panel2.setLayout(<span class = "keyword">new</span> GridLayout(<span class = "literal">2</span>, <span class = "literal">1</span>));
+ 38&nbsp;&nbsp;    panel2.add(jcbLocales, BorderLayout.CENTER);
+ 39&nbsp;&nbsp;    panel2.add(jcbTimeZones, BorderLayout.CENTER);
+ 40&nbsp;&nbsp;
+ 41&nbsp;&nbsp;    JPanel panel3 = <span class = "keyword">new</span> JPanel();
+ 42&nbsp;&nbsp;    panel3.setLayout(<span class = "keyword">new</span> BorderLayout());
+ 43&nbsp;&nbsp;    panel3.add(panel1, BorderLayout.WEST);
+ 44&nbsp;&nbsp;    panel3.add(panel2, BorderLayout.CENTER);
+ 45&nbsp;&nbsp;
+ 46&nbsp;&nbsp;    setLayout(<span class = "keyword">new</span> BorderLayout());
+ 47&nbsp;&nbsp;    add(panel3, BorderLayout.NORTH);
+ 48&nbsp;&nbsp;    add(clock, BorderLayout.CENTER);
+ 49&nbsp;&nbsp;
+ 50&nbsp;&nbsp;    jcbLocales.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 51&nbsp;&nbsp;      @Override
+ 52&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 53&nbsp;&nbsp;        clock.setLocale(
+ 54&nbsp;&nbsp;          availableLocales[jcbLocales.getSelectedIndex()]);
+ 55&nbsp;&nbsp;      }
+ 56&nbsp;&nbsp;    });
+ 57&nbsp;&nbsp;    jcbTimeZones.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 58&nbsp;&nbsp;      @Override
+ 59&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 60&nbsp;&nbsp;        clock.setTimeZone(TimeZone.getTimeZone(
+ 61&nbsp;&nbsp;          availableTimeZones[jcbTimeZones.getSelectedIndex()]));
+ 62&nbsp;&nbsp;      }
+ 63&nbsp;&nbsp;    });
+ 64&nbsp;&nbsp;  }
+ 65&nbsp;&nbsp;
+ 66&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">void</span> setAvailableLocales() {
+ 67&nbsp;&nbsp;    <span class = "keyword">for</span> (<span class = "keyword">int</span> i = <span class = "literal">0</span>; i &lt; availableLocales.length; i++) {
+ 68&nbsp;&nbsp;      jcbLocales.addItem(availableLocales[i].getDisplayName() + <span class = "literal">" "</span>
+ 69&nbsp;&nbsp;        + availableLocales[i].toString());
+ 70&nbsp;&nbsp;    }
+ 71&nbsp;&nbsp;  }
+ 72&nbsp;&nbsp;
+ 73&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">void</span> setAvailableTimeZones() {
+ 74&nbsp;&nbsp;    <span class = "comment">// Sort time zones</span>
+ 75&nbsp;&nbsp;    Arrays.sort(availableTimeZones);
+ 76&nbsp;&nbsp;    <span class = "keyword">for</span> (<span class = "keyword">int</span> i = <span class = "literal">0</span>; i &lt; availableTimeZones.length; i++) {
+ 77&nbsp;&nbsp;      jcbTimeZones.addItem(availableTimeZones[i]);
+ 78&nbsp;&nbsp;    }
+ 79&nbsp;&nbsp;  }
+ 80&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

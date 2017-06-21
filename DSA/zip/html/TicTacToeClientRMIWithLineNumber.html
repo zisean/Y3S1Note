@@ -1,0 +1,202 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - TicTacToeClientRMI.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "TicTacToeClientRMI.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.rmi.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.*;
+  4&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  5&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.border.*;
+  6&nbsp;&nbsp;<span class = "keyword">import</span> java.rmi.registry.Registry;
+  7&nbsp;&nbsp;<span class = "keyword">import</span> java.rmi.registry.LocateRegistry;
+  8&nbsp;&nbsp;
+  9&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> TicTacToeClientRMI <span class = "keyword">extends</span> JApplet {
+ 10&nbsp;&nbsp;  <span class = "comment">// marker is used to indicate the token type</span>
+ 11&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">char</span> marker;
+ 12&nbsp;&nbsp;
+ 13&nbsp;&nbsp;  <span class = "comment">// myTurn indicates whether the player can move now</span>
+ 14&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">boolean</span> myTurn = <span class = "keyword">false</span>;
+ 15&nbsp;&nbsp;
+ 16&nbsp;&nbsp;  <span class = "comment">// Each cell can be empty or marked as 'O' or 'X'</span>
+ 17&nbsp;&nbsp;  <span class = "keyword">private</span> Cell[][] cell;
+ 18&nbsp;&nbsp;
+ 19&nbsp;&nbsp;  <span class = "comment">// ticTacToe is the game server for coordinating </span>
+ 20&nbsp;&nbsp;  <span class = "comment">// with the players</span>
+ 21&nbsp;&nbsp;  <span class = "keyword">private</span> TicTacToeInterface ticTacToe;
+ 22&nbsp;&nbsp;
+ 23&nbsp;&nbsp;  <span class = "comment">// Border for cells and panel</span>
+ 24&nbsp;&nbsp;  <span class = "keyword">private</span> Border lineBorder =
+ 25&nbsp;&nbsp;    BorderFactory.createLineBorder(Color.yellow, <span class = "literal">1</span>);
+ 26&nbsp;&nbsp;
+ 27&nbsp;&nbsp;  <span class = "keyword">private</span> JLabel jlblStatus = <span class = "keyword">new</span> JLabel(<span class = "literal">"jLabel1"</span>);
+ 28&nbsp;&nbsp;  <span class = "keyword">private</span> JLabel jlblIdentification = <span class = "keyword">new</span> JLabel();
+ 29&nbsp;&nbsp;
+ 30&nbsp;&nbsp;  <span class = "keyword">boolean</span> isStandalone = <span class = "keyword">false</span>;
+ 31&nbsp;&nbsp;
+ 32&nbsp;&nbsp;  <span class = "comment">/** Initialize the applet */</span>
+ 33&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">void</span> init() {
+ 34&nbsp;&nbsp;    JPanel jPanel1 = <span class = "keyword">new</span> JPanel();
+ 35&nbsp;&nbsp;    jPanel1.setBorder(lineBorder);
+ 36&nbsp;&nbsp;    jPanel1.setLayout(<span class = "keyword">new</span> GridLayout(<span class = "literal">3</span>, <span class = "literal">3</span>, <span class = "literal">1</span>, <span class = "literal">1</span>));
+ 37&nbsp;&nbsp;
+ 38&nbsp;&nbsp;    add(jlblStatus, BorderLayout.SOUTH);
+ 39&nbsp;&nbsp;    add(jPanel1, BorderLayout.CENTER);
+ 40&nbsp;&nbsp;    add(jlblIdentification, BorderLayout.NORTH);
+ 41&nbsp;&nbsp;
+ 42&nbsp;&nbsp;    <span class = "comment">// Create cells and place cells in the panel</span>
+ 43&nbsp;&nbsp;    cell = <span class = "keyword">new</span> Cell[<span class = "literal">3</span>][<span class = "literal">3</span>];
+ 44&nbsp;&nbsp;    <span class = "keyword">for</span> (<span class = "keyword">int</span> i = <span class = "literal">0</span>; i &lt; <span class = "literal">3</span>; i++)
+ 45&nbsp;&nbsp;      <span class = "keyword">for</span> (<span class = "keyword">int</span> j = <span class = "literal">0</span>; j &lt; <span class = "literal">3</span>; j++)
+ 46&nbsp;&nbsp;        jPanel1.add(cell[i][j] = <span class = "keyword">new</span> Cell(i, j));
+ 47&nbsp;&nbsp;
+ 48&nbsp;&nbsp;    <span class = "keyword">try</span> {
+ 49&nbsp;&nbsp;      initializeRMI();
+ 50&nbsp;&nbsp;    }
+ 51&nbsp;&nbsp;    <span class = "keyword">catch</span> (Exception ex) {
+ 52&nbsp;&nbsp;      ex.printStackTrace();
+ 53&nbsp;&nbsp;    }
+ 54&nbsp;&nbsp;  }
+ 55&nbsp;&nbsp;
+ 56&nbsp;&nbsp;  <span class = "comment">/** Initialize RMI */</span>
+ 57&nbsp;&nbsp;  <span class = "keyword">protected</span> <span class = "keyword">boolean</span> initializeRMI() <span class = "keyword">throws</span> Exception {
+ 58&nbsp;&nbsp;    String host = <span class = "literal">""</span>;
+ 59&nbsp;&nbsp;    <span class = "keyword">if</span> (!isStandalone) host = getCodeBase().getHost();
+ 60&nbsp;&nbsp;  
+ 61&nbsp;&nbsp;    <span class = "keyword">try</span> {
+ 62&nbsp;&nbsp;      Registry registry = LocateRegistry.getRegistry(host);
+ 63&nbsp;&nbsp;      ticTacToe = (TicTacToeInterface) 
+ 64&nbsp;&nbsp;        registry.lookup(<span class = "literal">"TicTacToeImpl"</span>);
+ 65&nbsp;&nbsp;      System.out.println
+ 66&nbsp;&nbsp;        (<span class = "literal">"Server object "</span> + ticTacToe + <span class = "literal">" found"</span>);
+ 67&nbsp;&nbsp;    } 
+ 68&nbsp;&nbsp;    <span class = "keyword">catch</span> (Exception ex) {
+ 69&nbsp;&nbsp;      System.out.println(ex);
+ 70&nbsp;&nbsp;    }
+ 71&nbsp;&nbsp;
+ 72&nbsp;&nbsp;    <span class = "comment">// Create callback for use by the </span>
+ 73&nbsp;&nbsp;    <span class = "comment">// server to control the client</span>
+ 74&nbsp;&nbsp;    CallBackImpl callBackControl = <span class = "keyword">new</span> CallBackImpl(<span class = "keyword">this</span>);
+ 75&nbsp;&nbsp;
+ 76&nbsp;&nbsp;    <span class = "keyword">if</span> (
+ 77&nbsp;&nbsp;      (marker = 
+ 78&nbsp;&nbsp;        ticTacToe.connect((CallBack)callBackControl)) != ' ')
+ 79&nbsp;&nbsp;    {
+ 80&nbsp;&nbsp;      System.out.println(<span class = "literal">"connected as "</span> + marker + <span class = "literal">" player."</span>);
+ 81&nbsp;&nbsp;      jlblIdentification.setText(<span class = "literal">"You are player "</span> + marker);
+ 82&nbsp;&nbsp;      <span class = "keyword">return</span> <span class = "keyword">true</span>;
+ 83&nbsp;&nbsp;    }
+ 84&nbsp;&nbsp;    <span class = "keyword">else</span> {
+ 85&nbsp;&nbsp;      System.out.println(<span class = "literal">"already two players connected as "</span>);
+ 86&nbsp;&nbsp;      <span class = "keyword">return</span> <span class = "keyword">false</span>;
+ 87&nbsp;&nbsp;    }
+ 88&nbsp;&nbsp;  }
+ 89&nbsp;&nbsp;
+ 90&nbsp;&nbsp;  <span class = "comment">/** Set variable myTurn to true or false */</span>
+ 91&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">void</span> setMyTurn(<span class = "keyword">boolean</span> myTurn) {
+ 92&nbsp;&nbsp;    <span class = "keyword">this</span>.myTurn = myTurn;
+ 93&nbsp;&nbsp;  }
+ 94&nbsp;&nbsp;
+ 95&nbsp;&nbsp;  <span class = "comment">/** Set message on the status label */</span>
+ 96&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">void</span> setMessage(String message) {
+ 97&nbsp;&nbsp;    jlblStatus.setText(message);
+ 98&nbsp;&nbsp;  }
+ 99&nbsp;&nbsp;
+100&nbsp;&nbsp;  <span class = "comment">/** Mark the specified cell using the token */</span>
+101&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">void</span> mark(<span class = "keyword">int</span> row, <span class = "keyword">int</span> column, <span class = "keyword">char</span> token) {
+102&nbsp;&nbsp;    cell[row][column].setToken(token);
+103&nbsp;&nbsp;  }
+104&nbsp;&nbsp;
+105&nbsp;&nbsp;  <span class = "comment">/** Inner class Cell for 
+106&nbsp;&nbsp;   *  modeling a cell on the TicTacToe board */</span>
+107&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">class</span> Cell <span class = "keyword">extends</span> JPanel {
+108&nbsp;&nbsp;    <span class = "comment">// marked indicates whether the cell has been used</span>
+109&nbsp;&nbsp;    <span class = "keyword">private</span> <span class = "keyword">boolean</span> marked = <span class = "keyword">false</span>;
+110&nbsp;&nbsp;
+111&nbsp;&nbsp;    <span class = "comment">// row and column indicate where the cell </span>
+112&nbsp;&nbsp;    <span class = "comment">// appears on the board</span>
+113&nbsp;&nbsp;    <span class = "keyword">int</span> row, column;
+114&nbsp;&nbsp;
+115&nbsp;&nbsp;    <span class = "comment">// The token for the cell</span>
+116&nbsp;&nbsp;    <span class = "keyword">private</span> <span class = "keyword">char</span> token;
+117&nbsp;&nbsp;
+118&nbsp;&nbsp;    <span class = "comment">/** Construct a cell */</span>
+119&nbsp;&nbsp;    <span class = "keyword">public</span> Cell(<span class = "keyword">final</span> <span class = "keyword">int</span> row, <span class = "keyword">final</span> <span class = "keyword">int</span> column) {
+120&nbsp;&nbsp;      <span class = "keyword">this</span>.row = row;
+121&nbsp;&nbsp;      <span class = "keyword">this</span>.column = column;
+122&nbsp;&nbsp;      addMouseListener(<span class = "keyword">new</span> MouseAdapter() {
+123&nbsp;&nbsp;        <span class = "keyword">public</span> <span class = "keyword">void</span> mouseClicked(MouseEvent e) {
+124&nbsp;&nbsp;          <span class = "keyword">if</span> (myTurn && !marked) {
+125&nbsp;&nbsp;            <span class = "comment">// Mark the cell</span>
+126&nbsp;&nbsp;            setToken(marker);
+127&nbsp;&nbsp;
+128&nbsp;&nbsp;            <span class = "comment">// Notify the server of the move</span>
+129&nbsp;&nbsp;            <span class = "keyword">try</span> {
+130&nbsp;&nbsp;              ticTacToe.myMove(row, column, marker);
+131&nbsp;&nbsp;            }
+132&nbsp;&nbsp;            <span class = "keyword">catch</span> (RemoteException ex) {
+133&nbsp;&nbsp;              System.out.println(ex);
+134&nbsp;&nbsp;            }
+135&nbsp;&nbsp;          }
+136&nbsp;&nbsp;        }
+137&nbsp;&nbsp;      });
+138&nbsp;&nbsp;
+139&nbsp;&nbsp;      setBorder(lineBorder);
+140&nbsp;&nbsp;    }
+141&nbsp;&nbsp;
+142&nbsp;&nbsp;    <span class = "comment">/** Set token on a cell (mark a cell) */</span>
+143&nbsp;&nbsp;    <span class = "keyword">public</span> <span class = "keyword">void</span> setToken(<span class = "keyword">char</span> c) {
+144&nbsp;&nbsp;      token = c;
+145&nbsp;&nbsp;      marked = <span class = "keyword">true</span>;
+146&nbsp;&nbsp;      repaint();
+147&nbsp;&nbsp;    }
+148&nbsp;&nbsp;
+149&nbsp;&nbsp;    @Override <span class = "comment">/** Paint the cell to draw a shape for the token */</span>
+150&nbsp;&nbsp;    <span class = "keyword">protected</span> <span class = "keyword">void</span> paintComponent(Graphics g) {
+151&nbsp;&nbsp;      <span class = "keyword">super</span>.paintComponent(g);
+152&nbsp;&nbsp;
+153&nbsp;&nbsp;      <span class = "comment">// Draw the border</span>
+154&nbsp;&nbsp;      g.drawRect(<span class = "literal">0</span>, <span class = "literal">0</span>, getSize().width, getSize().height);
+155&nbsp;&nbsp;
+156&nbsp;&nbsp;      <span class = "keyword">if</span> (token == <span class = "literal">'X'</span>) {
+157&nbsp;&nbsp;        g.drawLine(<span class = "literal">10</span>, <span class = "literal">10</span>, getSize().width - <span class = "literal">10</span>,
+158&nbsp;&nbsp;          getSize().height - <span class = "literal">10</span>);
+159&nbsp;&nbsp;        g.drawLine(getSize().width - <span class = "literal">10</span>, <span class = "literal">10</span>, <span class = "literal">10</span>,
+160&nbsp;&nbsp;          getSize().height - <span class = "literal">10</span>);
+161&nbsp;&nbsp;      }
+162&nbsp;&nbsp;      <span class = "keyword">else</span> <span class = "keyword">if</span> (token == <span class = "literal">'O'</span>) {
+163&nbsp;&nbsp;        g.drawOval(<span class = "literal">10</span>, <span class = "literal">10</span>, getSize().width - <span class = "literal">20</span>,
+164&nbsp;&nbsp;          getSize().height - <span class = "literal">20</span>);
+165&nbsp;&nbsp;      }
+166&nbsp;&nbsp;    }
+167&nbsp;&nbsp;  }
+168&nbsp;&nbsp;
+169&nbsp;&nbsp;  <span class = "comment">/** Main method */</span>
+170&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+171&nbsp;&nbsp;    TicTacToeClientRMI applet = <span class = "keyword">new</span> TicTacToeClientRMI();
+172&nbsp;&nbsp;    applet.isStandalone = <span class = "keyword">true</span>;
+173&nbsp;&nbsp;    applet.init();
+174&nbsp;&nbsp;    applet.start();
+175&nbsp;&nbsp;    JFrame frame = <span class = "keyword">new</span> JFrame();
+176&nbsp;&nbsp;    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+177&nbsp;&nbsp;    frame.setTitle(<span class = "literal">"TicTacToeClientRMI"</span>);
+178&nbsp;&nbsp;    frame.add(applet, BorderLayout.CENTER);
+179&nbsp;&nbsp;    frame.setSize(<span class = "literal">400</span>, <span class = "literal">320</span>);
+180&nbsp;&nbsp;    frame.setVisible(<span class = "keyword">true</span>);
+181&nbsp;&nbsp;  }
+182&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

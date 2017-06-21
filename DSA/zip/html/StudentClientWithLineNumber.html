@@ -1,0 +1,154 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - StudentClient.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "StudentClient.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.io.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.net.*;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  4&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.*;
+  5&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  6&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.border.*;
+  7&nbsp;&nbsp;
+  8&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> StudentClient <span class = "keyword">extends</span> JApplet {
+  9&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfName = <span class = "keyword">new</span> JTextField(<span class = "literal">32</span>);
+ 10&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfStreet = <span class = "keyword">new</span> JTextField(<span class = "literal">32</span>);
+ 11&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfCity = <span class = "keyword">new</span> JTextField(<span class = "literal">20</span>);
+ 12&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfState = <span class = "keyword">new</span> JTextField(<span class = "literal">2</span>);
+ 13&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfZip = <span class = "keyword">new</span> JTextField(<span class = "literal">5</span>);
+ 14&nbsp;&nbsp;
+ 15&nbsp;&nbsp;  <span class = "comment">// Button for sending a student to the server</span>
+ 16&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtRegister = <span class = "keyword">new</span> JButton(<span class = "literal">"Register to the Server"</span>);
+ 17&nbsp;&nbsp;
+ 18&nbsp;&nbsp;  <span class = "comment">// Indicate if it runs as application</span>
+ 19&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">boolean</span> isStandAlone = <span class = "keyword">false</span>;
+ 20&nbsp;&nbsp;
+ 21&nbsp;&nbsp;  <span class = "comment">// Host name or ip</span>
+ 22&nbsp;&nbsp;  String host = <span class = "literal">"localhost"</span>;
+ 23&nbsp;&nbsp;
+ 24&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">void</span> init() {
+ 25&nbsp;&nbsp;    <span class = "comment">// Panel p1 for holding labels Name, Street, and City</span>
+ 26&nbsp;&nbsp;    JPanel p1 = <span class = "keyword">new</span> JPanel();
+ 27&nbsp;&nbsp;    p1.setLayout(<span class = "keyword">new</span> GridLayout(<span class = "literal">3</span>, <span class = "literal">1</span>));
+ 28&nbsp;&nbsp;    p1.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Name"</span>));
+ 29&nbsp;&nbsp;    p1.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Street"</span>));
+ 30&nbsp;&nbsp;    p1.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"City"</span>));
+ 31&nbsp;&nbsp;
+ 32&nbsp;&nbsp;    <span class = "comment">// Panel jpState for holding state</span>
+ 33&nbsp;&nbsp;    JPanel jpState = <span class = "keyword">new</span> JPanel();
+ 34&nbsp;&nbsp;    jpState.setLayout(<span class = "keyword">new</span> BorderLayout());
+ 35&nbsp;&nbsp;    jpState.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"State"</span>), BorderLayout.WEST);
+ 36&nbsp;&nbsp;    jpState.add(jtfState, BorderLayout.CENTER);
+ 37&nbsp;&nbsp;
+ 38&nbsp;&nbsp;    <span class = "comment">// Panel jpZip for holding zip</span>
+ 39&nbsp;&nbsp;    JPanel jpZip = <span class = "keyword">new</span> JPanel();
+ 40&nbsp;&nbsp;    jpZip.setLayout(<span class = "keyword">new</span> BorderLayout());
+ 41&nbsp;&nbsp;    jpZip.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Zip"</span>), BorderLayout.WEST);
+ 42&nbsp;&nbsp;    jpZip.add(jtfZip, BorderLayout.CENTER);
+ 43&nbsp;&nbsp;
+ 44&nbsp;&nbsp;    <span class = "comment">// Panel p2 for holding jpState and jpZip</span>
+ 45&nbsp;&nbsp;    JPanel p2 = <span class = "keyword">new</span> JPanel();
+ 46&nbsp;&nbsp;    p2.setLayout(<span class = "keyword">new</span> BorderLayout());
+ 47&nbsp;&nbsp;    p2.add(jpState, BorderLayout.WEST);
+ 48&nbsp;&nbsp;    p2.add(jpZip, BorderLayout.CENTER);
+ 49&nbsp;&nbsp;
+ 50&nbsp;&nbsp;    <span class = "comment">// Panel p3 for holding jtfCity and p2</span>
+ 51&nbsp;&nbsp;    JPanel p3 = <span class = "keyword">new</span> JPanel();
+ 52&nbsp;&nbsp;    p3.setLayout(<span class = "keyword">new</span> BorderLayout());
+ 53&nbsp;&nbsp;    p3.add(jtfCity, BorderLayout.CENTER);
+ 54&nbsp;&nbsp;    p3.add(p2, BorderLayout.EAST);
+ 55&nbsp;&nbsp;
+ 56&nbsp;&nbsp;    <span class = "comment">// Panel p4 for holding jtfName, jtfStreet, and p3</span>
+ 57&nbsp;&nbsp;    JPanel p4 = <span class = "keyword">new</span> JPanel();
+ 58&nbsp;&nbsp;    p4.setLayout(<span class = "keyword">new</span> GridLayout(<span class = "literal">3</span>, <span class = "literal">1</span>));
+ 59&nbsp;&nbsp;    p4.add(jtfName);
+ 60&nbsp;&nbsp;    p4.add(jtfStreet);
+ 61&nbsp;&nbsp;    p4.add(p3);
+ 62&nbsp;&nbsp;
+ 63&nbsp;&nbsp;    <span class = "comment">// Place p1 and p4 into StudentPanel</span>
+ 64&nbsp;&nbsp;    JPanel studentPanel = <span class = "keyword">new</span> JPanel(<span class = "keyword">new</span> BorderLayout());
+ 65&nbsp;&nbsp;    studentPanel.setBorder(<span class = "keyword">new</span> BevelBorder(BevelBorder.RAISED));
+ 66&nbsp;&nbsp;    studentPanel.add(p1, BorderLayout.WEST);
+ 67&nbsp;&nbsp;    studentPanel.add(p4, BorderLayout.CENTER);
+ 68&nbsp;&nbsp;
+ 69&nbsp;&nbsp;    <span class = "comment">// Add the student panel and button to the applet</span>
+ 70&nbsp;&nbsp;    add(studentPanel, BorderLayout.CENTER);
+ 71&nbsp;&nbsp;    add(jbtRegister, BorderLayout.SOUTH);
+ 72&nbsp;&nbsp;
+ 73&nbsp;&nbsp;    <span class = "comment">// Register listener</span>
+ 74&nbsp;&nbsp;    jbtRegister.addActionListener(<span class = "keyword">new</span> ButtonListener());
+ 75&nbsp;&nbsp;
+ 76&nbsp;&nbsp;    <span class = "comment">// Find the IP address of the Web server</span>
+ 77&nbsp;&nbsp;    <span class = "keyword">if</span> (!isStandAlone)
+ 78&nbsp;&nbsp;      host = getCodeBase().getHost();
+ 79&nbsp;&nbsp;  }
+ 80&nbsp;&nbsp;
+ 81&nbsp;&nbsp;  <span class = "comment">/** Handle button action */</span>
+ 82&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">class</span> ButtonListener <span class = "keyword">implements</span> ActionListener {
+ 83&nbsp;&nbsp;    @Override
+ 84&nbsp;&nbsp;    <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 85&nbsp;&nbsp;      <span class = "keyword">try</span> {
+ 86&nbsp;&nbsp;        <span class = "comment">// Establish connection with the server</span>
+ 87&nbsp;&nbsp;        Socket socket = <span class = "keyword">new</span> Socket(host, <span class = "literal">8000</span>);
+ 88&nbsp;&nbsp;
+ 89&nbsp;&nbsp;        <span class = "comment">// Create an output stream to the server</span>
+ 90&nbsp;&nbsp;        ObjectOutputStream toServer =
+ 91&nbsp;&nbsp;          <span class = "keyword">new</span> ObjectOutputStream(socket.getOutputStream());
+ 92&nbsp;&nbsp;
+ 93&nbsp;&nbsp;        <span class = "comment">// Get text field</span>
+ 94&nbsp;&nbsp;        String name = jtfName.getText().trim();
+ 95&nbsp;&nbsp;        String street = jtfStreet.getText().trim();
+ 96&nbsp;&nbsp;        String city = jtfCity.getText().trim();
+ 97&nbsp;&nbsp;        String state = jtfState.getText().trim();
+ 98&nbsp;&nbsp;        String zip = jtfZip.getText().trim();
+ 99&nbsp;&nbsp;
+100&nbsp;&nbsp;        <span class = "comment">// Create a Student object and send to the server</span>
+101&nbsp;&nbsp;        StudentAddress s =
+102&nbsp;&nbsp;          <span class = "keyword">new</span> StudentAddress(name, street, city, state, zip);
+103&nbsp;&nbsp;        toServer.writeObject(s);
+104&nbsp;&nbsp;      }
+105&nbsp;&nbsp;      <span class = "keyword">catch</span> (IOException ex) {
+106&nbsp;&nbsp;        System.err.println(ex);
+107&nbsp;&nbsp;      }
+108&nbsp;&nbsp;    }
+109&nbsp;&nbsp;  }
+110&nbsp;&nbsp;
+111&nbsp;&nbsp;  <span class = "comment">/** Run the applet as an application */</span>
+112&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+113&nbsp;&nbsp;    <span class = "comment">// Create a frame</span>
+114&nbsp;&nbsp;    JFrame frame = <span class = "keyword">new</span> JFrame(<span class = "literal">"Register Student Client"</span>);
+115&nbsp;&nbsp;
+116&nbsp;&nbsp;    <span class = "comment">// Create an instance of the applet</span>
+117&nbsp;&nbsp;    StudentClient applet = <span class = "keyword">new</span> StudentClient();
+118&nbsp;&nbsp;    applet.isStandAlone = <span class = "keyword">true</span>;
+119&nbsp;&nbsp;
+120&nbsp;&nbsp;    <span class = "comment">// Get host</span>
+121&nbsp;&nbsp;    <span class = "keyword">if</span> (args.length == <span class = "literal">1</span>) applet.host = args[<span class = "literal">0</span>];
+122&nbsp;&nbsp;
+123&nbsp;&nbsp;    <span class = "comment">// Add the applet instance to the frame</span>
+124&nbsp;&nbsp;    frame.add(applet, BorderLayout.CENTER);
+125&nbsp;&nbsp;
+126&nbsp;&nbsp;    <span class = "comment">// Invoke init() and start()</span>
+127&nbsp;&nbsp;    applet.init();
+128&nbsp;&nbsp;    applet.start();
+129&nbsp;&nbsp;
+130&nbsp;&nbsp;    <span class = "comment">// Display the frame</span>
+131&nbsp;&nbsp;    frame.pack();
+132&nbsp;&nbsp;    frame.setVisible(<span class = "keyword">true</span>);
+133&nbsp;&nbsp;  }
+134&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

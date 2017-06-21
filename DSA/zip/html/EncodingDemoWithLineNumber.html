@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - EncodingDemo.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "EncodingDemo.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.util.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.io.*;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  4&nbsp;&nbsp;
+  5&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> EncodingDemo {
+  6&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args)
+  7&nbsp;&nbsp;      <span class = "keyword">throws</span> IOException, FileNotFoundException {
+  8&nbsp;&nbsp;    PrintWriter output = <span class = "keyword">new</span> PrintWriter(<span class = "literal">"temp.txt"</span>, <span class = "literal">"GB18030"</span>);
+  9&nbsp;&nbsp;    output.print(<span class = "literal">"\u6B22\u8FCE Welcome \u03b1\u03b2\u03b3"</span>);
+ 10&nbsp;&nbsp;    output.close();
+ 11&nbsp;&nbsp;
+ 12&nbsp;&nbsp;    Scanner input = <span class = "keyword">new</span> Scanner(<span class = "keyword">new</span> File(<span class = "literal">"temp.txt"</span>), <span class = "literal">"GB18030"</span>);
+ 13&nbsp;&nbsp;    JOptionPane.showMessageDialog(<span class = "keyword">null</span>, input.nextLine());
+ 14&nbsp;&nbsp;  }
+ 15&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

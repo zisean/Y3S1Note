@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - UnweightedGraph.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "UnweightedGraph.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.util.*;
+  2&nbsp;&nbsp;
+  3&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> UnweightedGraph&lt;V&gt; <span class = "keyword">extends</span> AbstractGraph&lt;V&gt; {
+  4&nbsp;&nbsp;  <span class = "comment">/** Construct an empty graph */</span>
+  5&nbsp;&nbsp;  <span class = "keyword">public</span> UnweightedGraph() {
+  6&nbsp;&nbsp;  }
+  7&nbsp;&nbsp;    
+  8&nbsp;&nbsp;  <span class = "comment">/** Construct a graph from edges and vertices stored in arrays */</span>
+  9&nbsp;&nbsp;  <span class = "keyword">public</span> UnweightedGraph(<span class = "keyword">int</span>[][] edges, V[] vertices) {
+ 10&nbsp;&nbsp;    <span class = "keyword">super</span>(edges, vertices);
+ 11&nbsp;&nbsp;  }
+ 12&nbsp;&nbsp;
+ 13&nbsp;&nbsp;  <span class = "comment">/** Construct a graph from edges and vertices stored in List */</span>
+ 14&nbsp;&nbsp;  <span class = "keyword">public</span> UnweightedGraph(List&lt;Edge&gt; edges, List&lt;V&gt; vertices) {
+ 15&nbsp;&nbsp;    <span class = "keyword">super</span>(edges, vertices);
+ 16&nbsp;&nbsp;  }
+ 17&nbsp;&nbsp;
+ 18&nbsp;&nbsp;  <span class = "comment">/** Construct a graph for integer vertices 0, 1, 2 and edge list */</span>
+ 19&nbsp;&nbsp;  <span class = "keyword">public</span> UnweightedGraph(List&lt;Edge&gt; edges, <span class = "keyword">int</span> numberOfVertices) {
+ 20&nbsp;&nbsp;    <span class = "keyword">super</span>(edges, numberOfVertices);
+ 21&nbsp;&nbsp;  }
+ 22&nbsp;&nbsp;  
+ 23&nbsp;&nbsp;  <span class = "comment">/** Construct a graph from integer vertices 0, 1, and edge array */</span>
+ 24&nbsp;&nbsp;  <span class = "keyword">public</span> UnweightedGraph(<span class = "keyword">int</span>[][] edges, <span class = "keyword">int</span> numberOfVertices) {
+ 25&nbsp;&nbsp;    <span class = "keyword">super</span>(edges, numberOfVertices);
+ 26&nbsp;&nbsp;  }
+ 27&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

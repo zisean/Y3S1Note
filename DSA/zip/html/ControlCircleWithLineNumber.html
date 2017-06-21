@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - ControlCircle.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "ControlCircle.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.*;
+  4&nbsp;&nbsp;  
+  5&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> ControlCircle <span class = "keyword">extends</span> JFrame {
+  6&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtEnlarge = <span class = "keyword">new</span> JButton(<span class = "literal">"Enlarge"</span>);
+  7&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtShrink = <span class = "keyword">new</span> JButton(<span class = "literal">"Shrink"</span>);
+  8&nbsp;&nbsp;  <span class = "keyword">private</span> CirclePanel canvas = <span class = "keyword">new</span> CirclePanel();
+  9&nbsp;&nbsp;    
+ 10&nbsp;&nbsp;  <span class = "keyword">public</span> ControlCircle() {
+ 11&nbsp;&nbsp;    JPanel panel = <span class = "keyword">new</span> JPanel(); <span class = "comment">// Use the panel to group buttons</span>
+ 12&nbsp;&nbsp;    panel.add(jbtEnlarge);
+ 13&nbsp;&nbsp;    panel.add(jbtShrink);
+ 14&nbsp;&nbsp;      
+ 15&nbsp;&nbsp;    <span class = "keyword">this</span>.add(canvas, BorderLayout.CENTER); <span class = "comment">// Add canvas to center</span>
+ 16&nbsp;&nbsp;    <span class = "keyword">this</span>.add(panel, BorderLayout.SOUTH); <span class = "comment">// Add buttons to the frame </span>
+ 17&nbsp;&nbsp;      
+ 18&nbsp;&nbsp;    jbtEnlarge.addActionListener(<span class = "keyword">new</span> EnlargeListener());
+ 19&nbsp;&nbsp;  }
+ 20&nbsp;&nbsp;    
+ 21&nbsp;&nbsp;  <span class = "comment">/** Main method */</span>
+ 22&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+ 23&nbsp;&nbsp;    JFrame frame = <span class = "keyword">new</span> ControlCircle();
+ 24&nbsp;&nbsp;    frame.setTitle(<span class = "literal">"ControlCircle"</span>);
+ 25&nbsp;&nbsp;    frame.setLocationRelativeTo(<span class = "keyword">null</span>); <span class = "comment">// Center the frame</span>
+ 26&nbsp;&nbsp;    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ 27&nbsp;&nbsp;    frame.setSize(<span class = "literal">200</span>, <span class = "literal">200</span>);
+ 28&nbsp;&nbsp;    frame.setVisible(<span class = "keyword">true</span>);
+ 29&nbsp;&nbsp;  }
+ 30&nbsp;&nbsp;   
+ 31&nbsp;&nbsp;  <span class = "keyword">class</span> EnlargeListener <span class = "keyword">implements</span> ActionListener { <span class = "comment">// Inner class</span>
+ 32&nbsp;&nbsp;     @Override
+ 33&nbsp;&nbsp;     <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 34&nbsp;&nbsp;       canvas.enlarge();
+ 35&nbsp;&nbsp;     }
+ 36&nbsp;&nbsp;  }
+ 37&nbsp;&nbsp;    
+ 38&nbsp;&nbsp;  <span class = "keyword">class</span> CirclePanel <span class = "keyword">extends</span> JPanel { <span class = "comment">// Inner class</span>
+ 39&nbsp;&nbsp;    <span class = "keyword">private</span> <span class = "keyword">int</span> radius = <span class = "literal">5</span>; <span class = "comment">// Default circle radius</span>
+ 40&nbsp;&nbsp;        
+ 41&nbsp;&nbsp;    <span class = "comment">/** Enlarge the circle */</span>
+ 42&nbsp;&nbsp;    <span class = "keyword">public</span> <span class = "keyword">void</span> enlarge() {
+ 43&nbsp;&nbsp;      radius++;
+ 44&nbsp;&nbsp;      repaint();
+ 45&nbsp;&nbsp;    }
+ 46&nbsp;&nbsp;      
+ 47&nbsp;&nbsp;    @Override 
+ 48&nbsp;&nbsp;    <span class = "keyword">protected</span> <span class = "keyword">void</span> paintComponent(Graphics g) {
+ 49&nbsp;&nbsp;      <span class = "keyword">super</span>.paintComponent(g);
+ 50&nbsp;&nbsp;      g.drawOval(getWidth() / <span class = "literal">2</span> - radius, getHeight() / <span class = "literal">2</span> - radius, 
+ 51&nbsp;&nbsp;        <span class = "literal">2</span> * radius, <span class = "literal">2</span> * radius);
+ 52&nbsp;&nbsp;    }
+ 53&nbsp;&nbsp;  }   
+ 54&nbsp;&nbsp;}  
+</pre>
+</body>
+</html>

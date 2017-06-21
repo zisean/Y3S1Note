@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - GraphView.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "GraphView.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> GraphView <span class = "keyword">extends</span> javax.swing.JPanel {
+  2&nbsp;&nbsp;  <span class = "keyword">private</span> Graph&lt;? <span class = "keyword">extends</span> Displayable&gt; graph;
+  3&nbsp;&nbsp;  
+  4&nbsp;&nbsp;  <span class = "keyword">public</span> GraphView(Graph&lt;? <span class = "keyword">extends</span> Displayable&gt; graph) {
+  5&nbsp;&nbsp;    <span class = "keyword">this</span>.graph = graph;
+  6&nbsp;&nbsp;  }
+  7&nbsp;&nbsp;  
+  8&nbsp;&nbsp;  @Override
+  9&nbsp;&nbsp;  <span class = "keyword">protected</span> <span class = "keyword">void</span> paintComponent(java.awt.Graphics g) {
+ 10&nbsp;&nbsp;    <span class = "keyword">super</span>.paintComponent(g);
+ 11&nbsp;&nbsp;    
+ 12&nbsp;&nbsp;    <span class = "comment">// Draw vertices</span>
+ 13&nbsp;&nbsp;    java.util.List&lt;? <span class = "keyword">extends</span> Displayable&gt; vertices 
+ 14&nbsp;&nbsp;      = graph.getVertices();    
+ 15&nbsp;&nbsp;    <span class = "keyword">for</span> (<span class = "keyword">int</span> i = <span class = "literal">0</span>; i &lt; graph.getSize(); i++) {
+ 16&nbsp;&nbsp;      <span class = "keyword">int</span> x = vertices.get(i).getX();
+ 17&nbsp;&nbsp;      <span class = "keyword">int</span> y = vertices.get(i).getY();
+ 18&nbsp;&nbsp;      String name = vertices.get(i).getName();
+ 19&nbsp;&nbsp;      
+ 20&nbsp;&nbsp;      g.fillOval(x - <span class = "literal">8</span>, y - <span class = "literal">8</span>, <span class = "literal">16</span>, <span class = "literal">16</span>); <span class = "comment">// Display a vertex</span>
+ 21&nbsp;&nbsp;      g.drawString(name, x - <span class = "literal">12</span>, y - <span class = "literal">12</span>); <span class = "comment">// Display the name</span>
+ 22&nbsp;&nbsp;    }
+ 23&nbsp;&nbsp;    
+ 24&nbsp;&nbsp;    <span class = "comment">// Draw edges for pair of vertices</span>
+ 25&nbsp;&nbsp;    <span class = "keyword">for</span> (<span class = "keyword">int</span> i = <span class = "literal">0</span>; i &lt; graph.getSize(); i++) {
+ 26&nbsp;&nbsp;      java.util.List&lt;Integer&gt; neighbors = graph.getNeighbors(i);
+ 27&nbsp;&nbsp;      <span class = "keyword">int</span> x1 = graph.getVertex(i).getX();
+ 28&nbsp;&nbsp;      <span class = "keyword">int</span> y1 = graph.getVertex(i).getY();
+ 29&nbsp;&nbsp;      <span class = "keyword">for</span> (<span class = "keyword">int</span> v: neighbors) {
+ 30&nbsp;&nbsp;        <span class = "keyword">int</span> x2 = graph.getVertex(v).getX();
+ 31&nbsp;&nbsp;        <span class = "keyword">int</span> y2 = graph.getVertex(v).getY();
+ 32&nbsp;&nbsp;        
+ 33&nbsp;&nbsp;        g.drawLine(x1, y1, x2, y2); <span class = "comment">// Draw an edge for (i, v)</span>
+ 34&nbsp;&nbsp;      }
+ 35&nbsp;&nbsp;    }
+ 36&nbsp;&nbsp;  }
+ 37&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

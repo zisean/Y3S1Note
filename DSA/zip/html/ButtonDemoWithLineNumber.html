@@ -1,0 +1,86 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - ButtonDemo.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "ButtonDemo.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.ActionListener;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.ActionEvent;
+  4&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  5&nbsp;&nbsp;
+  6&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> ButtonDemo <span class = "keyword">extends</span> JFrame {
+  7&nbsp;&nbsp;  <span class = "comment">// Create a panel for displaying message</span>
+  8&nbsp;&nbsp;  <span class = "keyword">protected</span> MessagePanel messagePanel
+  9&nbsp;&nbsp;    = <span class = "keyword">new</span> MessagePanel(<span class = "literal">"Welcome to Java"</span>);
+ 10&nbsp;&nbsp;
+ 11&nbsp;&nbsp;  <span class = "comment">// Declare two buttons to move the message left and right</span>
+ 12&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtLeft = <span class = "keyword">new</span> JButton(<span class = "literal">"&lt;="</span>);
+ 13&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtRight = <span class = "keyword">new</span> JButton(<span class = "literal">"=&gt;"</span>);
+ 14&nbsp;&nbsp;
+ 15&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+ 16&nbsp;&nbsp;    ButtonDemo frame = <span class = "keyword">new</span> ButtonDemo();
+ 17&nbsp;&nbsp;    frame.setTitle(<span class = "literal">"ButtonDemo"</span>);
+ 18&nbsp;&nbsp;    frame.setLocationRelativeTo(<span class = "keyword">null</span>); <span class = "comment">// Center the frame</span>
+ 19&nbsp;&nbsp;    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ 20&nbsp;&nbsp;    frame.setSize(<span class = "literal">250</span>, <span class = "literal">100</span>);
+ 21&nbsp;&nbsp;    frame.setVisible(<span class = "keyword">true</span>);
+ 22&nbsp;&nbsp;  }
+ 23&nbsp;&nbsp;
+ 24&nbsp;&nbsp;  <span class = "keyword">public</span> ButtonDemo() {
+ 25&nbsp;&nbsp;    <span class = "comment">// Set the background color of messagePanel</span>
+ 26&nbsp;&nbsp;    messagePanel.setBackground(Color.white);
+ 27&nbsp;&nbsp;
+ 28&nbsp;&nbsp;    <span class = "comment">// Create Panel jpButtons to hold two Buttons "&lt;=" and "right =&gt;"</span>
+ 29&nbsp;&nbsp;    JPanel jpButtons = <span class = "keyword">new</span> JPanel();
+ 30&nbsp;&nbsp;    jpButtons.add(jbtLeft);
+ 31&nbsp;&nbsp;    jpButtons.add(jbtRight);
+ 32&nbsp;&nbsp;
+ 33&nbsp;&nbsp;    <span class = "comment">// Set keyboard mnemonics</span>
+ 34&nbsp;&nbsp;    jbtLeft.setMnemonic(<span class = "literal">'L'</span>);
+ 35&nbsp;&nbsp;    jbtRight.setMnemonic(<span class = "literal">'R'</span>);
+ 36&nbsp;&nbsp;
+ 37&nbsp;&nbsp;    <span class = "comment">// Set icons and remove text</span>
+ 38&nbsp;&nbsp;<span class = "comment">//    jbtLeft.setIcon(new ImageIcon("image/left.gif"));</span>
+ 39&nbsp;&nbsp;<span class = "comment">//    jbtRight.setIcon(new ImageIcon("image/right.gif"));</span>
+ 40&nbsp;&nbsp;<span class = "comment">//    jbtLeft.setText(null);</span>
+ 41&nbsp;&nbsp;<span class = "comment">//    jbtRight.setText(null);</span>
+ 42&nbsp;&nbsp;
+ 43&nbsp;&nbsp;    <span class = "comment">// Set tool tip text on the buttons</span>
+ 44&nbsp;&nbsp;    jbtLeft.setToolTipText(<span class = "literal">"Move message to left"</span>);
+ 45&nbsp;&nbsp;    jbtRight.setToolTipText(<span class = "literal">"Move message to right"</span>);
+ 46&nbsp;&nbsp;
+ 47&nbsp;&nbsp;    <span class = "comment">// Place panels in the frame</span>
+ 48&nbsp;&nbsp;    setLayout(<span class = "keyword">new</span> BorderLayout());
+ 49&nbsp;&nbsp;    add(messagePanel, BorderLayout.CENTER);
+ 50&nbsp;&nbsp;    add(jpButtons, BorderLayout.SOUTH);
+ 51&nbsp;&nbsp;
+ 52&nbsp;&nbsp;    <span class = "comment">// Register listeners with the buttons</span>
+ 53&nbsp;&nbsp;    jbtLeft.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 54&nbsp;&nbsp;      @Override
+ 55&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 56&nbsp;&nbsp;        messagePanel.moveLeft();
+ 57&nbsp;&nbsp;      }
+ 58&nbsp;&nbsp;    });
+ 59&nbsp;&nbsp;    jbtRight.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 60&nbsp;&nbsp;      @Override
+ 61&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 62&nbsp;&nbsp;        messagePanel.moveRight();
+ 63&nbsp;&nbsp;      }
+ 64&nbsp;&nbsp;    });
+ 65&nbsp;&nbsp;  }
+ 66&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

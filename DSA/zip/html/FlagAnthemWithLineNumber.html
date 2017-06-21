@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - FlagAnthem.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "FlagAnthem.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.*;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  4&nbsp;&nbsp;<span class = "keyword">import</span> java.applet.*;
+  5&nbsp;&nbsp;
+  6&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> FlagAnthem <span class = "keyword">extends</span> JApplet {
+  7&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">final</span> <span class = "keyword">static</span> <span class = "keyword">int</span> NUMBER_OF_NATIONS = <span class = "literal">7</span>;
+  8&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">int</span> current = <span class = "literal">0</span>;
+  9&nbsp;&nbsp;  <span class = "keyword">private</span> ImageIcon[] icons = <span class = "keyword">new</span> ImageIcon[NUMBER_OF_NATIONS];
+ 10&nbsp;&nbsp;  <span class = "keyword">private</span> AudioClip[] audioClips = <span class = "keyword">new</span> AudioClip[NUMBER_OF_NATIONS];
+ 11&nbsp;&nbsp;  <span class = "keyword">private</span> AudioClip currentAudioClip;
+ 12&nbsp;&nbsp;
+ 13&nbsp;&nbsp;  <span class = "keyword">private</span> JLabel jlblImageLabel = <span class = "keyword">new</span> JLabel();
+ 14&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtResume = <span class = "keyword">new</span> JButton(<span class = "literal">"Resume"</span>);
+ 15&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtSuspend = <span class = "keyword">new</span> JButton(<span class = "literal">"Suspend"</span>);
+ 16&nbsp;&nbsp;  <span class = "keyword">private</span> JComboBox jcboNations = <span class = "keyword">new</span> JComboBox(<span class = "keyword">new</span> Object[]
+ 17&nbsp;&nbsp;    {<span class = "literal">"Denmark"</span>, <span class = "literal">"Germany"</span>, <span class = "literal">"China"</span>, <span class = "literal">"India"</span>, <span class = "literal">"Norway"</span>, <span class = "literal">"UK"</span>, <span class = "literal">"US"</span>});
+ 18&nbsp;&nbsp;
+ 19&nbsp;&nbsp;  <span class = "keyword">public</span> FlagAnthem() {
+ 20&nbsp;&nbsp;    <span class = "comment">// Load image icons and audio clips</span>
+ 21&nbsp;&nbsp;    <span class = "keyword">for</span> (<span class = "keyword">int</span> i = <span class = "literal">0</span>; i &lt; NUMBER_OF_NATIONS; i++) {
+ 22&nbsp;&nbsp;      icons[i] = <span class = "keyword">new</span> ImageIcon(getClass().getResource(
+ 23&nbsp;&nbsp;        <span class = "literal">"image/flag"</span> + i + <span class = "literal">".gif"</span>));
+ 24&nbsp;&nbsp;      audioClips[i] = Applet.newAudioClip(
+ 25&nbsp;&nbsp;        getClass().getResource(<span class = "literal">"audio/anthem"</span> + i + <span class = "literal">".mid"</span>));
+ 26&nbsp;&nbsp;    }
+ 27&nbsp;&nbsp;
+ 28&nbsp;&nbsp;    JPanel panel = <span class = "keyword">new</span> JPanel();
+ 29&nbsp;&nbsp;    panel.add(jbtResume);
+ 30&nbsp;&nbsp;    panel.add(jbtSuspend);
+ 31&nbsp;&nbsp;    panel.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Select"</span>));
+ 32&nbsp;&nbsp;    panel.add(jcboNations);
+ 33&nbsp;&nbsp;    add(jlblImageLabel, BorderLayout.CENTER);
+ 34&nbsp;&nbsp;    add(panel, BorderLayout.SOUTH);
+ 35&nbsp;&nbsp;
+ 36&nbsp;&nbsp;    jbtResume.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 37&nbsp;&nbsp;      @Override 
+ 38&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 39&nbsp;&nbsp;        start();
+ 40&nbsp;&nbsp;      }
+ 41&nbsp;&nbsp;    });
+ 42&nbsp;&nbsp;    jbtSuspend.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 43&nbsp;&nbsp;      @Override 
+ 44&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 45&nbsp;&nbsp;        stop();
+ 46&nbsp;&nbsp;      }
+ 47&nbsp;&nbsp;    });
+ 48&nbsp;&nbsp;    jcboNations.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 49&nbsp;&nbsp;      @Override 
+ 50&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 51&nbsp;&nbsp;        stop();
+ 52&nbsp;&nbsp;        current = jcboNations.getSelectedIndex();
+ 53&nbsp;&nbsp;        presentNation(current);
+ 54&nbsp;&nbsp;      }
+ 55&nbsp;&nbsp;    });
+ 56&nbsp;&nbsp;
+ 57&nbsp;&nbsp;    jlblImageLabel.setIcon(icons[<span class = "literal">0</span>]);
+ 58&nbsp;&nbsp;    jlblImageLabel.setHorizontalAlignment(JLabel.CENTER);
+ 59&nbsp;&nbsp;    currentAudioClip = audioClips[<span class = "literal">0</span>];
+ 60&nbsp;&nbsp;    currentAudioClip.play();
+ 61&nbsp;&nbsp;  }
+ 62&nbsp;&nbsp;
+ 63&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">void</span> presentNation(<span class = "keyword">int</span> index) {
+ 64&nbsp;&nbsp;    jlblImageLabel.setIcon(icons[index]);
+ 65&nbsp;&nbsp;    jcboNations.setSelectedIndex(index);
+ 66&nbsp;&nbsp;    currentAudioClip = audioClips[index];
+ 67&nbsp;&nbsp;    currentAudioClip.play();
+ 68&nbsp;&nbsp;  }
+ 69&nbsp;&nbsp;
+ 70&nbsp;&nbsp;  @Override 
+ 71&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">void</span> start() {
+ 72&nbsp;&nbsp;    currentAudioClip.play();
+ 73&nbsp;&nbsp;  }
+ 74&nbsp;&nbsp;
+ 75&nbsp;&nbsp;  @Override 
+ 76&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">void</span> stop() {
+ 77&nbsp;&nbsp;    currentAudioClip.stop();
+ 78&nbsp;&nbsp;  }
+ 79&nbsp;&nbsp;
+ 80&nbsp;&nbsp;  <span class = "comment">/** Main method */</span>
+ 81&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+ 82&nbsp;&nbsp;    <span class = "comment">// Create a frame</span>
+ 83&nbsp;&nbsp;    JFrame frame = <span class = "keyword">new</span> JFrame(<span class = "literal">"FlagAnthem"</span>);
+ 84&nbsp;&nbsp;
+ 85&nbsp;&nbsp;    <span class = "comment">// Create an instance of the applet</span>
+ 86&nbsp;&nbsp;    FlagAnthem applet = <span class = "keyword">new</span> FlagAnthem();
+ 87&nbsp;&nbsp;    applet.init();
+ 88&nbsp;&nbsp;
+ 89&nbsp;&nbsp;    <span class = "comment">// Add the applet instance to the frame</span>
+ 90&nbsp;&nbsp;    frame.getContentPane().add(applet, BorderLayout.CENTER);
+ 91&nbsp;&nbsp;    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ 92&nbsp;&nbsp;
+ 93&nbsp;&nbsp;    <span class = "comment">// Display the frame</span>
+ 94&nbsp;&nbsp;    frame.setSize(<span class = "literal">400</span>, <span class = "literal">300</span>);
+ 95&nbsp;&nbsp;    frame.setVisible(<span class = "keyword">true</span>);
+ 96&nbsp;&nbsp;  }
+ 97&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

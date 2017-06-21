@@ -1,0 +1,119 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - CalendarApp.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "CalendarApp.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.*;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  4&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.border.*;
+  5&nbsp;&nbsp;<span class = "keyword">import</span> java.util.*;
+  6&nbsp;&nbsp;
+  7&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> CalendarApp <span class = "keyword">extends</span> JApplet {
+  8&nbsp;&nbsp;  <span class = "comment">// Create a CalendarPanel for showing calendars</span>
+  9&nbsp;&nbsp;  <span class = "keyword">private</span> CalendarPanel calendarPanel = <span class = "keyword">new</span> CalendarPanel();
+ 10&nbsp;&nbsp;
+ 11&nbsp;&nbsp;  <span class = "comment">// Combo box for selecting available locales</span>
+ 12&nbsp;&nbsp;  <span class = "keyword">private</span> JComboBox jcboLocale = <span class = "keyword">new</span> JComboBox();
+ 13&nbsp;&nbsp;
+ 14&nbsp;&nbsp;  <span class = "comment">// Declare locales to store available locales</span>
+ 15&nbsp;&nbsp;  <span class = "keyword">private</span> Locale locales[] = Calendar.getAvailableLocales();
+ 16&nbsp;&nbsp;
+ 17&nbsp;&nbsp;  <span class = "comment">// Buttons Prior and Next for displaying prior and next month</span>
+ 18&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtPrior = <span class = "keyword">new</span> JButton(<span class = "literal">"Prior"</span>);
+ 19&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtNext = <span class = "keyword">new</span> JButton(<span class = "literal">"Next"</span>);
+ 20&nbsp;&nbsp;
+ 21&nbsp;&nbsp;  <span class = "comment">/** Initialize the applet */</span>
+ 22&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">void</span> init() {
+ 23&nbsp;&nbsp;    <span class = "comment">// Panel jpLocale to hold the combo box for selecting locales</span>
+ 24&nbsp;&nbsp;    JPanel jpLocale = <span class = "keyword">new</span> JPanel(<span class = "keyword">new</span> FlowLayout());
+ 25&nbsp;&nbsp;    jpLocale.setBorder(<span class = "keyword">new</span> TitledBorder(<span class = "literal">"Choose a locale"</span>));
+ 26&nbsp;&nbsp;    jpLocale.add(jcboLocale);
+ 27&nbsp;&nbsp;
+ 28&nbsp;&nbsp;    <span class = "comment">// Initialize the combo box to add locale names</span>
+ 29&nbsp;&nbsp;    <span class = "keyword">for</span> (<span class = "keyword">int</span> i = <span class = "literal">0</span>; i &lt; locales.length; i++)
+ 30&nbsp;&nbsp;      jcboLocale.addItem(locales[i].getDisplayName());
+ 31&nbsp;&nbsp;
+ 32&nbsp;&nbsp;    <span class = "comment">// Panel jpButtons to hold buttons</span>
+ 33&nbsp;&nbsp;    JPanel jpButtons = <span class = "keyword">new</span> JPanel(<span class = "keyword">new</span> FlowLayout());
+ 34&nbsp;&nbsp;    jpButtons.add(jbtPrior);
+ 35&nbsp;&nbsp;    jpButtons.add(jbtNext);
+ 36&nbsp;&nbsp;
+ 37&nbsp;&nbsp;    <span class = "comment">// Panel jpCalendar to hold calendarPanel and buttons</span>
+ 38&nbsp;&nbsp;    JPanel jpCalendar = <span class = "keyword">new</span> JPanel(<span class = "keyword">new</span> BorderLayout());
+ 39&nbsp;&nbsp;    jpCalendar.add(calendarPanel, BorderLayout.CENTER);
+ 40&nbsp;&nbsp;    jpCalendar.add(jpButtons, BorderLayout.SOUTH);
+ 41&nbsp;&nbsp;
+ 42&nbsp;&nbsp;    <span class = "comment">// Place jpCalendar and jpLocale to the applet</span>
+ 43&nbsp;&nbsp;    add(jpCalendar, BorderLayout.CENTER);
+ 44&nbsp;&nbsp;    add(jpLocale, BorderLayout.SOUTH);
+ 45&nbsp;&nbsp;
+ 46&nbsp;&nbsp;    <span class = "comment">// Register listeners</span>
+ 47&nbsp;&nbsp;    jcboLocale.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 48&nbsp;&nbsp;      @Override
+ 49&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 50&nbsp;&nbsp;        <span class = "keyword">if</span> (e.getSource() == jcboLocale)
+ 51&nbsp;&nbsp;          calendarPanel.changeLocale(
+ 52&nbsp;&nbsp;            locales[jcboLocale.getSelectedIndex()]);
+ 53&nbsp;&nbsp;      }
+ 54&nbsp;&nbsp;    });
+ 55&nbsp;&nbsp;
+ 56&nbsp;&nbsp;    jbtPrior.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 57&nbsp;&nbsp;      @Override
+ 58&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 59&nbsp;&nbsp;        <span class = "keyword">int</span> currentMonth = calendarPanel.getMonth();
+ 60&nbsp;&nbsp;        <span class = "keyword">if</span> (currentMonth == <span class = "literal">0</span>) <span class = "comment">// The previous month is 11 for Dec</span>
+ 61&nbsp;&nbsp;          calendarPanel.setYear(calendarPanel.getYear() - <span class = "literal">1</span>);
+ 62&nbsp;&nbsp;          calendarPanel.setMonth((currentMonth - <span class = "literal">1</span>) % <span class = "literal">12</span>);
+ 63&nbsp;&nbsp;      }});
+ 64&nbsp;&nbsp;
+ 65&nbsp;&nbsp;    jbtNext.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 66&nbsp;&nbsp;      @Override
+ 67&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 68&nbsp;&nbsp;        <span class = "keyword">int</span> currentMonth = calendarPanel.getMonth();
+ 69&nbsp;&nbsp;        <span class = "keyword">if</span> (currentMonth == <span class = "literal">11</span>) <span class = "comment">// The next month is 0 for Jan</span>
+ 70&nbsp;&nbsp;          calendarPanel.setYear(calendarPanel.getYear() + <span class = "literal">1</span>);
+ 71&nbsp;&nbsp;
+ 72&nbsp;&nbsp;        calendarPanel.setMonth((currentMonth + <span class = "literal">1</span>) % <span class = "literal">12</span>);
+ 73&nbsp;&nbsp;      }});
+ 74&nbsp;&nbsp;
+ 75&nbsp;&nbsp;    calendarPanel.changeLocale(
+ 76&nbsp;&nbsp;      locales[jcboLocale.getSelectedIndex()]);
+ 77&nbsp;&nbsp;  }
+ 78&nbsp;&nbsp;
+ 79&nbsp;&nbsp;  <span class = "comment">/** Main method */</span>
+ 80&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+ 81&nbsp;&nbsp;    <span class = "comment">// Create a frame</span>
+ 82&nbsp;&nbsp;    JFrame frame = <span class = "keyword">new</span> JFrame(<span class = "literal">"CalendarApp"</span>);
+ 83&nbsp;&nbsp;
+ 84&nbsp;&nbsp;    <span class = "comment">// Create an instance of the applet</span>
+ 85&nbsp;&nbsp;    CalendarApp applet = <span class = "keyword">new</span> CalendarApp();
+ 86&nbsp;&nbsp;
+ 87&nbsp;&nbsp;    <span class = "comment">// Add the applet instance to the frame</span>
+ 88&nbsp;&nbsp;    frame.getContentPane().add(applet, BorderLayout.CENTER);
+ 89&nbsp;&nbsp;
+ 90&nbsp;&nbsp;    <span class = "comment">// Invoke init() and start()</span>
+ 91&nbsp;&nbsp;    applet.init();
+ 92&nbsp;&nbsp;    applet.start();
+ 93&nbsp;&nbsp;
+ 94&nbsp;&nbsp;    <span class = "comment">// Display the frame</span>
+ 95&nbsp;&nbsp;    frame.pack();
+ 96&nbsp;&nbsp;    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ 97&nbsp;&nbsp;    frame.setVisible(<span class = "keyword">true</span>);
+ 98&nbsp;&nbsp;  }
+ 99&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

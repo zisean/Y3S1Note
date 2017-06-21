@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - DetectEndOfFile.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "DetectEndOfFile.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.io.*;
+  2&nbsp;&nbsp;
+  3&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> DetectEndOfFile { 
+  4&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+  5&nbsp;&nbsp;    <span class = "keyword">try</span> {
+  6&nbsp;&nbsp;      DataOutputStream output = <span class = "keyword">new</span> DataOutputStream(<span class = "keyword">new</span> FileOutputStream(<span class = "literal">"test.dat"</span>));
+  7&nbsp;&nbsp;      output.writeDouble(<span class = "literal">4</span>.<span class = "literal">5</span>);
+  8&nbsp;&nbsp;      output.writeDouble(<span class = "literal">43</span>.<span class = "literal">25</span>);
+  9&nbsp;&nbsp;      output.writeDouble(<span class = "literal">3</span>.<span class = "literal">2</span>);
+ 10&nbsp;&nbsp;      output.close();
+ 11&nbsp;&nbsp;      
+ 12&nbsp;&nbsp;      DataInputStream input = <span class = "keyword">new</span> DataInputStream(<span class = "keyword">new</span> FileInputStream(<span class = "literal">"test.dat"</span>));
+ 13&nbsp;&nbsp;      <span class = "keyword">while</span> (<span class = "keyword">true</span>) {
+ 14&nbsp;&nbsp;        System.out.println(input.readDouble());
+ 15&nbsp;&nbsp;      }
+ 16&nbsp;&nbsp;    }
+ 17&nbsp;&nbsp;    <span class = "keyword">catch</span> (EOFException ex) {
+ 18&nbsp;&nbsp;      System.out.println(<span class = "literal">"All data were read"</span>);
+ 19&nbsp;&nbsp;    }
+ 20&nbsp;&nbsp;    <span class = "keyword">catch</span> (IOException ex) {
+ 21&nbsp;&nbsp;      ex.printStackTrace();
+ 22&nbsp;&nbsp;    }
+ 23&nbsp;&nbsp;  }
+ 24&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

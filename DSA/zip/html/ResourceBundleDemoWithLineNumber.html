@@ -1,0 +1,232 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - ResourceBundleDemo.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "ResourceBundleDemo.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.*;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  4&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.border.*;
+  5&nbsp;&nbsp;<span class = "keyword">import</span> java.util.*;
+  6&nbsp;&nbsp;<span class = "keyword">import</span> java.text.NumberFormat;
+  7&nbsp;&nbsp;
+  8&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> ResourceBundleDemo <span class = "keyword">extends</span> JApplet {
+  9&nbsp;&nbsp;  <span class = "comment">// Combo box for selecting available locales</span>
+ 10&nbsp;&nbsp;  <span class = "keyword">private</span> JComboBox jcboLocale = <span class = "keyword">new</span> JComboBox();
+ 11&nbsp;&nbsp;  <span class = "keyword">private</span> ResourceBundle res = ResourceBundle.getBundle(<span class = "literal">"MyResource"</span>);
+ 12&nbsp;&nbsp;
+ 13&nbsp;&nbsp;  <span class = "comment">// Create labels</span>
+ 14&nbsp;&nbsp;  <span class = "keyword">private</span> JLabel jlblInterestRate =
+ 15&nbsp;&nbsp;    <span class = "keyword">new</span> JLabel(res.getString(<span class = "literal">"Annual_Interest_Rate"</span>));
+ 16&nbsp;&nbsp;  <span class = "keyword">private</span> JLabel jlblNumberOfYears =
+ 17&nbsp;&nbsp;    <span class = "keyword">new</span> JLabel(res.getString(<span class = "literal">"Number_Of_Years"</span>));
+ 18&nbsp;&nbsp;  <span class = "keyword">private</span> JLabel jlblLoanAmount = 
+ 19&nbsp;&nbsp;    <span class = "keyword">new</span> JLabel(res.getString(<span class = "literal">"Loan_Amount"</span>));
+ 20&nbsp;&nbsp;  <span class = "keyword">private</span> JLabel jlblMonthlyPayment =
+ 21&nbsp;&nbsp;    <span class = "keyword">new</span> JLabel(res.getString(<span class = "literal">"Monthly_Payment"</span>));
+ 22&nbsp;&nbsp;  <span class = "keyword">private</span> JLabel jlblTotalPayment =
+ 23&nbsp;&nbsp;    <span class = "keyword">new</span> JLabel(res.getString(<span class = "literal">"Total_Payment"</span>));
+ 24&nbsp;&nbsp;
+ 25&nbsp;&nbsp;  <span class = "comment">// Create titled borders</span>
+ 26&nbsp;&nbsp;  <span class = "keyword">private</span> TitledBorder comboBoxTitle =
+ 27&nbsp;&nbsp;    <span class = "keyword">new</span> TitledBorder(res.getString(<span class = "literal">"Choose_a_Locale"</span>));
+ 28&nbsp;&nbsp;  <span class = "keyword">private</span> TitledBorder inputTitle = <span class = "keyword">new</span> TitledBorder
+ 29&nbsp;&nbsp;    (res.getString(<span class = "literal">"Enter_Interest_Rate"</span>));
+ 30&nbsp;&nbsp;  <span class = "keyword">private</span> TitledBorder paymentTitle =
+ 31&nbsp;&nbsp;    <span class = "keyword">new</span> TitledBorder(res.getString(<span class = "literal">"Payment"</span>));
+ 32&nbsp;&nbsp;
+ 33&nbsp;&nbsp;  <span class = "comment">// Text fields for interest rate, year, loan amount,</span>
+ 34&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfInterestRate = <span class = "keyword">new</span> JTextField(<span class = "literal">"6.75"</span>);
+ 35&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfNumberOfYears = <span class = "keyword">new</span> JTextField(<span class = "literal">"15"</span>);
+ 36&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfLoanAmount = <span class = "keyword">new</span> JTextField(<span class = "literal">"107000"</span>);
+ 37&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfFormattedInterestRate = <span class = "keyword">new</span> JTextField(<span class = "literal">10</span>);
+ 38&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfFormattedNumberOfYears = <span class = "keyword">new</span> JTextField(<span class = "literal">10</span>);
+ 39&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfFormattedLoanAmount = <span class = "keyword">new</span> JTextField(<span class = "literal">10</span>);
+ 40&nbsp;&nbsp;
+ 41&nbsp;&nbsp;  <span class = "comment">// Text fields for monthly payment and total payment</span>
+ 42&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfTotalPayment = <span class = "keyword">new</span> JTextField();
+ 43&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfMonthlyPayment = <span class = "keyword">new</span> JTextField();
+ 44&nbsp;&nbsp;
+ 45&nbsp;&nbsp;  <span class = "comment">// Compute button</span>
+ 46&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtCompute = <span class = "keyword">new</span> JButton(res.getString(<span class = "literal">"Compute"</span>));
+ 47&nbsp;&nbsp;
+ 48&nbsp;&nbsp;  <span class = "comment">// Current locale</span>
+ 49&nbsp;&nbsp;  <span class = "keyword">private</span> Locale locale = Locale.getDefault();
+ 50&nbsp;&nbsp;
+ 51&nbsp;&nbsp;  <span class = "comment">// Declare locales to store available locales</span>
+ 52&nbsp;&nbsp;  <span class = "keyword">private</span> Locale locales[] = Calendar.getAvailableLocales();
+ 53&nbsp;&nbsp;
+ 54&nbsp;&nbsp;  <span class = "comment">/** Initialize the combo box */</span>
+ 55&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">void</span> initializeComboBox() {
+ 56&nbsp;&nbsp;    <span class = "comment">// Add locale names to the combo box</span>
+ 57&nbsp;&nbsp;    <span class = "keyword">for</span> (<span class = "keyword">int</span> i = <span class = "literal">0</span>; i &lt; locales.length; i++)
+ 58&nbsp;&nbsp;      jcboLocale.addItem(locales[i].getDisplayName());
+ 59&nbsp;&nbsp;  }
+ 60&nbsp;&nbsp;
+ 61&nbsp;&nbsp;  <span class = "comment">/** Initialize the applet */</span>
+ 62&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">void</span> init() {
+ 63&nbsp;&nbsp;    <span class = "comment">// Panel p1 to hold the combo box for selecting locales</span>
+ 64&nbsp;&nbsp;    JPanel p1 = <span class = "keyword">new</span> JPanel();
+ 65&nbsp;&nbsp;    p1.setLayout(<span class = "keyword">new</span> FlowLayout());
+ 66&nbsp;&nbsp;    p1.add(jcboLocale);
+ 67&nbsp;&nbsp;    initializeComboBox();
+ 68&nbsp;&nbsp;    p1.setBorder(comboBoxTitle);
+ 69&nbsp;&nbsp;
+ 70&nbsp;&nbsp;    <span class = "comment">// Panel p2 to hold the input for annual interest rate,</span>
+ 71&nbsp;&nbsp;    <span class = "comment">// number of years and loan amount</span>
+ 72&nbsp;&nbsp;    JPanel p2 = <span class = "keyword">new</span> JPanel();
+ 73&nbsp;&nbsp;    p2.setLayout(<span class = "keyword">new</span> GridLayout(<span class = "literal">3</span>, <span class = "literal">3</span>));
+ 74&nbsp;&nbsp;    p2.add(jlblInterestRate);
+ 75&nbsp;&nbsp;    p2.add(jtfInterestRate);
+ 76&nbsp;&nbsp;    p2.add(jtfFormattedInterestRate);
+ 77&nbsp;&nbsp;    p2.add(jlblNumberOfYears);
+ 78&nbsp;&nbsp;    p2.add(jtfNumberOfYears);
+ 79&nbsp;&nbsp;    p2.add(jtfFormattedNumberOfYears);
+ 80&nbsp;&nbsp;    p2.add(jlblLoanAmount);
+ 81&nbsp;&nbsp;    p2.add(jtfLoanAmount);
+ 82&nbsp;&nbsp;    p2.add(jtfFormattedLoanAmount);
+ 83&nbsp;&nbsp;    p2.setBorder(inputTitle);
+ 84&nbsp;&nbsp;
+ 85&nbsp;&nbsp;    <span class = "comment">// Panel p3 to hold the payment</span>
+ 86&nbsp;&nbsp;    JPanel p3 = <span class = "keyword">new</span> JPanel();
+ 87&nbsp;&nbsp;    p3.setLayout(<span class = "keyword">new</span> GridLayout(<span class = "literal">2</span>, <span class = "literal">2</span>));
+ 88&nbsp;&nbsp;    p3.setBorder(paymentTitle);
+ 89&nbsp;&nbsp;    p3.add(jlblMonthlyPayment);
+ 90&nbsp;&nbsp;    p3.add(jtfMonthlyPayment);
+ 91&nbsp;&nbsp;    p3.add(jlblTotalPayment);
+ 92&nbsp;&nbsp;    p3.add(jtfTotalPayment);
+ 93&nbsp;&nbsp;
+ 94&nbsp;&nbsp;    <span class = "comment">// Set text field alignment</span>
+ 95&nbsp;&nbsp;    jtfFormattedInterestRate.setHorizontalAlignment
+ 96&nbsp;&nbsp;      (JTextField.RIGHT);
+ 97&nbsp;&nbsp;    jtfFormattedNumberOfYears.setHorizontalAlignment
+ 98&nbsp;&nbsp;      (JTextField.RIGHT);
+ 99&nbsp;&nbsp;    jtfFormattedLoanAmount.setHorizontalAlignment(JTextField.RIGHT);
+100&nbsp;&nbsp;    jtfTotalPayment.setHorizontalAlignment(JTextField.RIGHT);
+101&nbsp;&nbsp;    jtfMonthlyPayment.setHorizontalAlignment(JTextField.RIGHT);
+102&nbsp;&nbsp;
+103&nbsp;&nbsp;    <span class = "comment">// Set editable false</span>
+104&nbsp;&nbsp;    jtfFormattedInterestRate.setEditable(<span class = "keyword">false</span>);
+105&nbsp;&nbsp;    jtfFormattedNumberOfYears.setEditable(<span class = "keyword">false</span>);
+106&nbsp;&nbsp;    jtfFormattedLoanAmount.setEditable(<span class = "keyword">false</span>);
+107&nbsp;&nbsp;    jtfTotalPayment.setEditable(<span class = "keyword">false</span>);
+108&nbsp;&nbsp;    jtfMonthlyPayment.setEditable(<span class = "keyword">false</span>);
+109&nbsp;&nbsp;
+110&nbsp;&nbsp;    <span class = "comment">// Panel p4 to hold result payments and a button</span>
+111&nbsp;&nbsp;    JPanel p4 = <span class = "keyword">new</span> JPanel();
+112&nbsp;&nbsp;    p4.setLayout(<span class = "keyword">new</span> BorderLayout());
+113&nbsp;&nbsp;    p4.add(p3, BorderLayout.CENTER);
+114&nbsp;&nbsp;    p4.add(jbtCompute, BorderLayout.SOUTH);
+115&nbsp;&nbsp;
+116&nbsp;&nbsp;    <span class = "comment">// Place panels to the applet</span>
+117&nbsp;&nbsp;    add(p1, BorderLayout.NORTH);
+118&nbsp;&nbsp;    add(p2, BorderLayout.CENTER);
+119&nbsp;&nbsp;    add(p4, BorderLayout.SOUTH);
+120&nbsp;&nbsp;
+121&nbsp;&nbsp;    <span class = "comment">// Register listeners</span>
+122&nbsp;&nbsp;    jcboLocale.addActionListener(<span class = "keyword">new</span> ActionListener() {
+123&nbsp;&nbsp;      @Override
+124&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+125&nbsp;&nbsp;        locale = locales[jcboLocale.getSelectedIndex()];
+126&nbsp;&nbsp;        updateStrings();
+127&nbsp;&nbsp;        computeLoan();
+128&nbsp;&nbsp;      }
+129&nbsp;&nbsp;    });
+130&nbsp;&nbsp;
+131&nbsp;&nbsp;    jbtCompute.addActionListener(<span class = "keyword">new</span> ActionListener() {
+132&nbsp;&nbsp;      @Override
+133&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+134&nbsp;&nbsp;        computeLoan();
+135&nbsp;&nbsp;      }
+136&nbsp;&nbsp;    });
+137&nbsp;&nbsp;  }
+138&nbsp;&nbsp;
+139&nbsp;&nbsp;  <span class = "comment">/** Compute payments and display results locale-sensitive format */</span>
+140&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">void</span> computeLoan() {
+141&nbsp;&nbsp;    <span class = "comment">// Retrieve input from user</span>
+142&nbsp;&nbsp;    <span class = "keyword">double</span> loan = <span class = "keyword">new</span> Double(jtfLoanAmount.getText()).doubleValue();
+143&nbsp;&nbsp;    <span class = "keyword">double</span> interestRate =
+144&nbsp;&nbsp;      <span class = "keyword">new</span> Double(jtfInterestRate.getText()).doubleValue() / <span class = "literal">1240</span>;
+145&nbsp;&nbsp;    <span class = "keyword">int</span> numberOfYears =
+146&nbsp;&nbsp;      <span class = "keyword">new</span> Integer(jtfNumberOfYears.getText()).intValue();
+147&nbsp;&nbsp;
+148&nbsp;&nbsp;    <span class = "comment">// Calculate payments</span>
+149&nbsp;&nbsp;    <span class = "keyword">double</span> monthlyPayment = loan * interestRate/
+150&nbsp;&nbsp;      (<span class = "literal">1</span> - (Math.pow(<span class = "literal">1</span> / (<span class = "literal">1</span> + interestRate), numberOfYears * <span class = "literal">12</span>)));
+151&nbsp;&nbsp;    <span class = "keyword">double</span> totalPayment = monthlyPayment * numberOfYears * <span class = "literal">12</span>;
+152&nbsp;&nbsp;
+153&nbsp;&nbsp;    <span class = "comment">// Get formatters</span>
+154&nbsp;&nbsp;    NumberFormat percentFormatter =
+155&nbsp;&nbsp;      NumberFormat.getPercentInstance(locale);
+156&nbsp;&nbsp;    NumberFormat currencyForm =
+157&nbsp;&nbsp;      NumberFormat.getCurrencyInstance(locale);
+158&nbsp;&nbsp;    NumberFormat numberForm = NumberFormat.getNumberInstance(locale);
+159&nbsp;&nbsp;    percentFormatter.setMinimumFractionDigits(<span class = "literal">2</span>);
+160&nbsp;&nbsp;
+161&nbsp;&nbsp;    <span class = "comment">// Display formatted input</span>
+162&nbsp;&nbsp;    jtfFormattedInterestRate.setText(
+163&nbsp;&nbsp;      percentFormatter.format(interestRate * <span class = "literal">12</span>));
+164&nbsp;&nbsp;    jtfFormattedNumberOfYears.setText
+165&nbsp;&nbsp;      (numberForm.format(numberOfYears));
+166&nbsp;&nbsp;    jtfFormattedLoanAmount.setText(currencyForm.format(loan));
+167&nbsp;&nbsp;
+168&nbsp;&nbsp;    <span class = "comment">// Display results in currency format</span>
+169&nbsp;&nbsp;    jtfMonthlyPayment.setText(currencyForm.format(monthlyPayment));
+170&nbsp;&nbsp;    jtfTotalPayment.setText(currencyForm.format(totalPayment));
+171&nbsp;&nbsp;  }
+172&nbsp;&nbsp;
+173&nbsp;&nbsp;  <span class = "comment">/** Update resource strings */</span>
+174&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">void</span> updateStrings() {
+175&nbsp;&nbsp;    res = ResourceBundle.getBundle(<span class = "literal">"MyResource"</span>, locale);
+176&nbsp;&nbsp;    jlblInterestRate.setText(res.getString(<span class = "literal">"Annual_Interest_Rate"</span>));
+177&nbsp;&nbsp;    jlblNumberOfYears.setText(res.getString(<span class = "literal">"Number_Of_Years"</span>));
+178&nbsp;&nbsp;    jlblLoanAmount.setText(res.getString(<span class = "literal">"Loan_Amount"</span>));
+179&nbsp;&nbsp;    jlblTotalPayment.setText(res.getString(<span class = "literal">"Total_Payment"</span>));
+180&nbsp;&nbsp;    jlblMonthlyPayment.setText(res.getString(<span class = "literal">"Monthly_Payment"</span>));
+181&nbsp;&nbsp;    jbtCompute.setText(res.getString(<span class = "literal">"Compute"</span>));
+182&nbsp;&nbsp;    comboBoxTitle.setTitle(res.getString(<span class = "literal">"Choose_a_Locale"</span>));
+183&nbsp;&nbsp;    inputTitle.setTitle(res.getString(<span class = "literal">"Enter_Interest_Rate"</span>));
+184&nbsp;&nbsp;    paymentTitle.setTitle(res.getString(<span class = "literal">"Payment"</span>));
+185&nbsp;&nbsp;
+186&nbsp;&nbsp;    <span class = "comment">// Make sure the new labels are displayed</span>
+187&nbsp;&nbsp;    repaint();
+188&nbsp;&nbsp;}
+189&nbsp;&nbsp;
+190&nbsp;&nbsp;  <span class = "comment">/** Main method */</span>
+191&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+192&nbsp;&nbsp;    <span class = "comment">// Create an instance of the applet</span>
+193&nbsp;&nbsp;    ResourceBundleDemo applet = <span class = "keyword">new</span> ResourceBundleDemo();
+194&nbsp;&nbsp;
+195&nbsp;&nbsp;    <span class = "comment">// Create a frame with a resource string</span>
+196&nbsp;&nbsp;    JFrame frame = <span class = "keyword">new</span> JFrame(
+197&nbsp;&nbsp;      applet.res.getString(<span class = "literal">"Number_Formatting"</span>));
+198&nbsp;&nbsp;
+199&nbsp;&nbsp;    <span class = "comment">// Add the applet instance to the frame</span>
+200&nbsp;&nbsp;    frame.add(applet, BorderLayout.CENTER);
+201&nbsp;&nbsp;
+202&nbsp;&nbsp;    <span class = "comment">// Invoke init() and start()</span>
+203&nbsp;&nbsp;    applet.init();
+204&nbsp;&nbsp;    applet.start();
+205&nbsp;&nbsp;
+206&nbsp;&nbsp;    <span class = "comment">// Display the frame</span>
+207&nbsp;&nbsp;    frame.setSize(<span class = "literal">400</span>, <span class = "literal">300</span>);
+208&nbsp;&nbsp;    frame.setLocationRelativeTo(<span class = "keyword">null</span>);
+209&nbsp;&nbsp;    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+210&nbsp;&nbsp;    frame.setVisible(<span class = "keyword">true</span>);
+211&nbsp;&nbsp;  }
+212&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

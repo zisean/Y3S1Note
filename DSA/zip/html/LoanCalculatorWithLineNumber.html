@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - LoanCalculator.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "LoanCalculator.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.*;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  4&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.border.TitledBorder;
+  5&nbsp;&nbsp;
+  6&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> LoanCalculator <span class = "keyword">extends</span> JFrame {
+  7&nbsp;&nbsp;  <span class = "comment">// Create text fields for interest rate, years</span>
+  8&nbsp;&nbsp;  <span class = "comment">// loan amount, monthly payment, and total payment</span>
+  9&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfAnnualInterestRate = <span class = "keyword">new</span> JTextField();
+ 10&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfNumberOfYears = <span class = "keyword">new</span> JTextField();
+ 11&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfLoanAmount = <span class = "keyword">new</span> JTextField();
+ 12&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfMonthlyPayment = <span class = "keyword">new</span> JTextField();
+ 13&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfTotalPayment = <span class = "keyword">new</span> JTextField();
+ 14&nbsp;&nbsp;
+ 15&nbsp;&nbsp;  <span class = "comment">// Create a Compute Payment button</span>
+ 16&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtComputeLoan = <span class = "keyword">new</span> JButton(<span class = "literal">"Compute Payment"</span>);
+ 17&nbsp;&nbsp;
+ 18&nbsp;&nbsp;  <span class = "keyword">public</span> LoanCalculator() {
+ 19&nbsp;&nbsp;    <span class = "comment">// Panel p1 to hold labels and text fields</span>
+ 20&nbsp;&nbsp;    JPanel p1 = <span class = "keyword">new</span> JPanel(<span class = "keyword">new</span> GridLayout(<span class = "literal">5</span>, <span class = "literal">2</span>));
+ 21&nbsp;&nbsp;    p1.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Annual Interest Rate"</span>));
+ 22&nbsp;&nbsp;    p1.add(jtfAnnualInterestRate);
+ 23&nbsp;&nbsp;    p1.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Number of Years"</span>));
+ 24&nbsp;&nbsp;    p1.add(jtfNumberOfYears);
+ 25&nbsp;&nbsp;    p1.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Loan Amount"</span>));
+ 26&nbsp;&nbsp;    p1.add(jtfLoanAmount);
+ 27&nbsp;&nbsp;    p1.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Monthly Payment"</span>));
+ 28&nbsp;&nbsp;    p1.add(jtfMonthlyPayment);
+ 29&nbsp;&nbsp;    p1.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Total Payment"</span>));
+ 30&nbsp;&nbsp;    p1.add(jtfTotalPayment);
+ 31&nbsp;&nbsp;    p1.setBorder(<span class = "keyword">new</span>
+ 32&nbsp;&nbsp;      TitledBorder(<span class = "literal">"Enter loan amount, interest rate, and years"</span>));
+ 33&nbsp;&nbsp;
+ 34&nbsp;&nbsp;    <span class = "comment">// Panel p2 to hold the button</span>
+ 35&nbsp;&nbsp;    JPanel p2 = <span class = "keyword">new</span> JPanel(<span class = "keyword">new</span> FlowLayout(FlowLayout.RIGHT));
+ 36&nbsp;&nbsp;    p2.add(jbtComputeLoan);
+ 37&nbsp;&nbsp;
+ 38&nbsp;&nbsp;    <span class = "comment">// Add the panels to the frame</span>
+ 39&nbsp;&nbsp;    add(p1, BorderLayout.CENTER);
+ 40&nbsp;&nbsp;    add(p2, BorderLayout.SOUTH);
+ 41&nbsp;&nbsp;
+ 42&nbsp;&nbsp;    <span class = "comment">// Register listener</span>
+ 43&nbsp;&nbsp;    jbtComputeLoan.addActionListener(<span class = "keyword">new</span> ButtonListener());
+ 44&nbsp;&nbsp;  }
+ 45&nbsp;&nbsp;
+ 46&nbsp;&nbsp;  <span class = "comment">/** Handle the Compute Payment button */</span>
+ 47&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">class</span> ButtonListener <span class = "keyword">implements</span> ActionListener {
+ 48&nbsp;&nbsp;    @Override 
+ 49&nbsp;&nbsp;    <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 50&nbsp;&nbsp;      <span class = "comment">// Get values from text fields</span>
+ 51&nbsp;&nbsp;      <span class = "keyword">double</span> interest =
+ 52&nbsp;&nbsp;        Double.parseDouble(jtfAnnualInterestRate.getText());
+ 53&nbsp;&nbsp;      <span class = "keyword">int</span> year = Integer.parseInt(jtfNumberOfYears.getText());
+ 54&nbsp;&nbsp;      <span class = "keyword">double</span> loanAmount =
+ 55&nbsp;&nbsp;        Double.parseDouble(jtfLoanAmount.getText());
+ 56&nbsp;&nbsp;
+ 57&nbsp;&nbsp;      <span class = "comment">// Create a loan object</span>
+ 58&nbsp;&nbsp;      Loan loan = <span class = "keyword">new</span> Loan(interest, year, loanAmount);
+ 59&nbsp;&nbsp;
+ 60&nbsp;&nbsp;      <span class = "comment">// Display monthly payment and total payment</span>
+ 61&nbsp;&nbsp;      jtfMonthlyPayment.setText(String.format(<span class = "literal">"%.2f"</span>,
+ 62&nbsp;&nbsp;        loan.getMonthlyPayment()));
+ 63&nbsp;&nbsp;      jtfTotalPayment.setText(String.format(<span class = "literal">"%.2f"</span>,
+ 64&nbsp;&nbsp;        loan.getTotalPayment()));
+ 65&nbsp;&nbsp;    }
+ 66&nbsp;&nbsp;  }
+ 67&nbsp;&nbsp;  
+ 68&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+ 69&nbsp;&nbsp;    LoanCalculator frame = <span class = "keyword">new</span> LoanCalculator();
+ 70&nbsp;&nbsp;    frame.pack();
+ 71&nbsp;&nbsp;    frame.setTitle(<span class = "literal">"LoanCalculator"</span>);
+ 72&nbsp;&nbsp;    frame.setLocationRelativeTo(<span class = "keyword">null</span>); <span class = "comment">// Center the frame</span>
+ 73&nbsp;&nbsp;    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ 74&nbsp;&nbsp;    frame.setVisible(<span class = "keyword">true</span>);
+ 75&nbsp;&nbsp;  }
+ 76&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

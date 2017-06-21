@@ -1,0 +1,227 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - CopyFileToTable.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "CopyFileToTable.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.border.*;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  4&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.*;
+  5&nbsp;&nbsp;<span class = "keyword">import</span> java.io.*;
+  6&nbsp;&nbsp;<span class = "keyword">import</span> java.sql.*;
+  7&nbsp;&nbsp;<span class = "keyword">import</span> java.util.*;
+  8&nbsp;&nbsp;
+  9&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> CopyFileToTable <span class = "keyword">extends</span> JFrame {
+ 10&nbsp;&nbsp;  <span class = "comment">// Text file info</span>
+ 11&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfFilename = <span class = "keyword">new</span> JTextField();
+ 12&nbsp;&nbsp;  <span class = "keyword">private</span> JTextArea jtaFile = <span class = "keyword">new</span> JTextArea();
+ 13&nbsp;&nbsp;
+ 14&nbsp;&nbsp;  <span class = "comment">// JDBC and table info</span>
+ 15&nbsp;&nbsp;  <span class = "keyword">private</span> JComboBox jcboDriver = <span class = "keyword">new</span> JComboBox(<span class = "keyword">new</span> String[] {
+ 16&nbsp;&nbsp;    <span class = "literal">"com.mysql.jdbc.Driver"</span>, <span class = "literal">"sun.jdbc.odbc.JdbcOdbcDriver"</span>,
+ 17&nbsp;&nbsp;    <span class = "literal">"oracle.jdbc.driver.OracleDriver"</span>});
+ 18&nbsp;&nbsp;  <span class = "keyword">private</span> JComboBox jcboURL = <span class = "keyword">new</span> JComboBox(<span class = "keyword">new</span> String[] {
+ 19&nbsp;&nbsp;    <span class = "literal">"jdbc:mysql://localhost/javabook"</span>, 
+ 20&nbsp;&nbsp;    <span class = "literal">"jdbc:odbc:exampleMDBDataSource"</span>,
+ 21&nbsp;&nbsp;    <span class = "literal">"jdbc:oracle:thin:@liang.armstrong.edu:1521:orcl"</span>});
+ 22&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfUsername = <span class = "keyword">new</span> JTextField();
+ 23&nbsp;&nbsp;  <span class = "keyword">private</span> JPasswordField jtfPassword = <span class = "keyword">new</span> JPasswordField();
+ 24&nbsp;&nbsp;  <span class = "keyword">private</span> JTextField jtfTableName = <span class = "keyword">new</span> JTextField();
+ 25&nbsp;&nbsp;
+ 26&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtViewFile = <span class = "keyword">new</span> JButton(<span class = "literal">"View File"</span>);
+ 27&nbsp;&nbsp;  <span class = "keyword">private</span> JButton jbtCopy = <span class = "keyword">new</span> JButton(<span class = "literal">"Copy"</span>);
+ 28&nbsp;&nbsp;  <span class = "keyword">private</span> JLabel jlblStatus = <span class = "keyword">new</span> JLabel();
+ 29&nbsp;&nbsp;
+ 30&nbsp;&nbsp;  <span class = "keyword">public</span> CopyFileToTable() {
+ 31&nbsp;&nbsp;    JPanel jPanel1 = <span class = "keyword">new</span> JPanel();
+ 32&nbsp;&nbsp;    jPanel1.setLayout(<span class = "keyword">new</span> BorderLayout());
+ 33&nbsp;&nbsp;    jPanel1.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Filename"</span>), BorderLayout.WEST);
+ 34&nbsp;&nbsp;    jPanel1.add(jbtViewFile, BorderLayout.EAST);
+ 35&nbsp;&nbsp;    jPanel1.add(jtfFilename, BorderLayout.CENTER);
+ 36&nbsp;&nbsp;
+ 37&nbsp;&nbsp;    JPanel jPanel2 = <span class = "keyword">new</span> JPanel();
+ 38&nbsp;&nbsp;    jPanel2.setLayout(<span class = "keyword">new</span> BorderLayout());
+ 39&nbsp;&nbsp;    jPanel2.setBorder(<span class = "keyword">new</span> TitledBorder(<span class = "literal">"Source Text File"</span>));
+ 40&nbsp;&nbsp;    jPanel2.add(jPanel1, BorderLayout.NORTH);
+ 41&nbsp;&nbsp;    jPanel2.add(<span class = "keyword">new</span> JScrollPane(jtaFile), BorderLayout.CENTER);
+ 42&nbsp;&nbsp;
+ 43&nbsp;&nbsp;    JPanel jPanel3 = <span class = "keyword">new</span> JPanel();
+ 44&nbsp;&nbsp;    jPanel3.setLayout(<span class = "keyword">new</span> GridLayout(<span class = "literal">5</span>, <span class = "literal">0</span>));
+ 45&nbsp;&nbsp;    jPanel3.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"JDBC Driver"</span>));
+ 46&nbsp;&nbsp;    jPanel3.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Database URL"</span>));
+ 47&nbsp;&nbsp;    jPanel3.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Username"</span>));
+ 48&nbsp;&nbsp;    jPanel3.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Password"</span>));
+ 49&nbsp;&nbsp;    jPanel3.add(<span class = "keyword">new</span> JLabel(<span class = "literal">"Table Name"</span>));
+ 50&nbsp;&nbsp;
+ 51&nbsp;&nbsp;    JPanel jPanel4 = <span class = "keyword">new</span> JPanel();
+ 52&nbsp;&nbsp;    jPanel4.setLayout(<span class = "keyword">new</span> GridLayout(<span class = "literal">5</span>, <span class = "literal">0</span>));
+ 53&nbsp;&nbsp;    jcboDriver.setEditable(<span class = "keyword">true</span>);
+ 54&nbsp;&nbsp;    jPanel4.add(jcboDriver);
+ 55&nbsp;&nbsp;    jcboURL.setEditable(<span class = "keyword">true</span>);
+ 56&nbsp;&nbsp;    jPanel4.add(jcboURL);
+ 57&nbsp;&nbsp;    jPanel4.add(jtfUsername);
+ 58&nbsp;&nbsp;    jPanel4.add(jtfPassword);
+ 59&nbsp;&nbsp;    jPanel4.add(jtfTableName);
+ 60&nbsp;&nbsp;
+ 61&nbsp;&nbsp;    JPanel jPanel5 = <span class = "keyword">new</span> JPanel();
+ 62&nbsp;&nbsp;    jPanel5.setLayout(<span class = "keyword">new</span> BorderLayout());
+ 63&nbsp;&nbsp;    jPanel5.setBorder(<span class = "keyword">new</span> TitledBorder(<span class = "literal">"Target Database Table"</span>));
+ 64&nbsp;&nbsp;    jPanel5.add(jbtCopy, BorderLayout.SOUTH);
+ 65&nbsp;&nbsp;    jPanel5.add(jPanel3, BorderLayout.WEST);
+ 66&nbsp;&nbsp;    jPanel5.add(jPanel4, BorderLayout.CENTER);
+ 67&nbsp;&nbsp;
+ 68&nbsp;&nbsp;    add(jlblStatus, BorderLayout.SOUTH);
+ 69&nbsp;&nbsp;    add(<span class = "keyword">new</span> JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+ 70&nbsp;&nbsp;      jPanel2, jPanel5), BorderLayout.CENTER);
+ 71&nbsp;&nbsp;
+ 72&nbsp;&nbsp;    jbtViewFile.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 73&nbsp;&nbsp;      @Override
+ 74&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent evt) {
+ 75&nbsp;&nbsp;        showFile();
+ 76&nbsp;&nbsp;      }
+ 77&nbsp;&nbsp;    });
+ 78&nbsp;&nbsp;
+ 79&nbsp;&nbsp;    jbtCopy.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 80&nbsp;&nbsp;      @Override
+ 81&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent evt) {
+ 82&nbsp;&nbsp;        <span class = "keyword">try</span> {
+ 83&nbsp;&nbsp;          copyFile();
+ 84&nbsp;&nbsp;        }
+ 85&nbsp;&nbsp;        <span class = "keyword">catch</span> (Exception ex) {
+ 86&nbsp;&nbsp;          jlblStatus.setText(ex.toString());
+ 87&nbsp;&nbsp;        }
+ 88&nbsp;&nbsp;      }
+ 89&nbsp;&nbsp;    });
+ 90&nbsp;&nbsp;  }
+ 91&nbsp;&nbsp;
+ 92&nbsp;&nbsp;  <span class = "comment">/** Display the file in the text area */</span>
+ 93&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">void</span> showFile() {
+ 94&nbsp;&nbsp;    Scanner input = <span class = "keyword">null</span>;
+ 95&nbsp;&nbsp;    <span class = "keyword">try</span> {
+ 96&nbsp;&nbsp;      <span class = "comment">// Use a Scanner to read text from the file</span>
+ 97&nbsp;&nbsp;      input = <span class = "keyword">new</span> Scanner(<span class = "keyword">new</span> File(jtfFilename.getText().trim()));
+ 98&nbsp;&nbsp;
+ 99&nbsp;&nbsp;      <span class = "comment">// Read a line and append the line to the text area</span>
+100&nbsp;&nbsp;      <span class = "keyword">while</span> (input.hasNext()) 
+101&nbsp;&nbsp;        jtaFile.append(input.nextLine() + <span class = "literal">'\n'</span>);
+102&nbsp;&nbsp;    }
+103&nbsp;&nbsp;    <span class = "keyword">catch</span> (FileNotFoundException ex) {
+104&nbsp;&nbsp;      System.out.println(<span class = "literal">"File not found: "</span> + jtfFilename.getText());
+105&nbsp;&nbsp;    }
+106&nbsp;&nbsp;    <span class = "keyword">catch</span> (IOException ex) {
+107&nbsp;&nbsp;      ex.printStackTrace();
+108&nbsp;&nbsp;    }
+109&nbsp;&nbsp;    <span class = "keyword">finally</span> {
+110&nbsp;&nbsp;      <span class = "keyword">if</span> (input != <span class = "keyword">null</span>) input.close();
+111&nbsp;&nbsp;    }
+112&nbsp;&nbsp;  }
+113&nbsp;&nbsp;
+114&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">void</span> copyFile() <span class = "keyword">throws</span> Exception {
+115&nbsp;&nbsp;    <span class = "comment">// Load the JDBC driver</span>
+116&nbsp;&nbsp;    Class.forName(((String)jcboDriver.getSelectedItem()).trim());
+117&nbsp;&nbsp;    System.out.println(<span class = "literal">"Driver loaded"</span>);
+118&nbsp;&nbsp;
+119&nbsp;&nbsp;    <span class = "comment">// Establish a connection</span>
+120&nbsp;&nbsp;    Connection conn = DriverManager.getConnection
+121&nbsp;&nbsp;      (((String)jcboURL.getSelectedItem()).trim(),
+122&nbsp;&nbsp;      jtfUsername.getText().trim(),
+123&nbsp;&nbsp;      String.valueOf(jtfPassword.getPassword()).trim());
+124&nbsp;&nbsp;    System.out.println(<span class = "literal">"Database connected"</span>);
+125&nbsp;&nbsp;
+126&nbsp;&nbsp;    <span class = "comment">// Read each line from the text file and insert it to the table</span>
+127&nbsp;&nbsp;    insertRows(conn);
+128&nbsp;&nbsp;  }
+129&nbsp;&nbsp;
+130&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">void</span> insertRows(Connection connection) {
+131&nbsp;&nbsp;    <span class = "comment">// Build the SQL INSERT statement</span>
+132&nbsp;&nbsp;    String sqlInsert = <span class = "literal">"insert into "</span> + jtfTableName.getText()
+133&nbsp;&nbsp;      + <span class = "literal">" values ("</span>;
+134&nbsp;&nbsp;
+135&nbsp;&nbsp;    <span class = "comment">// Use a Scanner to read text from the file</span>
+136&nbsp;&nbsp;    Scanner input = <span class = "keyword">null</span>;
+137&nbsp;&nbsp;
+138&nbsp;&nbsp;    <span class = "comment">// Get file name from the text field</span>
+139&nbsp;&nbsp;    String filename = jtfFilename.getText().trim();
+140&nbsp;&nbsp;
+141&nbsp;&nbsp;    <span class = "keyword">try</span> {
+142&nbsp;&nbsp;      <span class = "comment">// Create a scanner</span>
+143&nbsp;&nbsp;      input = <span class = "keyword">new</span> Scanner(<span class = "keyword">new</span> File(filename));
+144&nbsp;&nbsp;
+145&nbsp;&nbsp;      <span class = "comment">// Create a statement</span>
+146&nbsp;&nbsp;      Statement statement = connection.createStatement();
+147&nbsp;&nbsp;
+148&nbsp;&nbsp;      System.out.println(<span class = "literal">"Driver major version? "</span> +
+149&nbsp;&nbsp;        connection.getMetaData().getDriverMajorVersion());
+150&nbsp;&nbsp;
+151&nbsp;&nbsp;      <span class = "comment">// Determine if batchUpdatesSupported is supported </span>
+152&nbsp;&nbsp;      <span class = "keyword">boolean</span> batchUpdatesSupported = <span class = "keyword">false</span>;
+153&nbsp;&nbsp;
+154&nbsp;&nbsp;      <span class = "keyword">try</span> {
+155&nbsp;&nbsp;        <span class = "keyword">if</span> (connection.getMetaData().supportsBatchUpdates()) {
+156&nbsp;&nbsp;          batchUpdatesSupported = <span class = "keyword">true</span>;
+157&nbsp;&nbsp;          System.out.println(<span class = "literal">"batch updates supported"</span>);
+158&nbsp;&nbsp;        }
+159&nbsp;&nbsp;        <span class = "keyword">else</span> {
+160&nbsp;&nbsp;          System.out.println(<span class = "literal">"The driver "</span> +
+161&nbsp;&nbsp;            <span class = "literal">"does not support batch updates"</span>);
+162&nbsp;&nbsp;        }
+163&nbsp;&nbsp;      }
+164&nbsp;&nbsp;      <span class = "keyword">catch</span> (UnsupportedOperationException ex) {
+165&nbsp;&nbsp;        System.out.println(<span class = "literal">"The operation is not supported"</span>);
+166&nbsp;&nbsp;      }
+167&nbsp;&nbsp;
+168&nbsp;&nbsp;      <span class = "comment">// Determine if the driver is capable of batch updates</span>
+169&nbsp;&nbsp;      <span class = "keyword">if</span> (batchUpdatesSupported) {
+170&nbsp;&nbsp;        <span class = "comment">// Read a line and add the insert table command to the batch</span>
+171&nbsp;&nbsp;        <span class = "keyword">while</span> (input.hasNext()) {
+172&nbsp;&nbsp;          statement.addBatch(sqlInsert + input.nextLine() + <span class = "literal">")"</span>);
+173&nbsp;&nbsp;        }
+174&nbsp;&nbsp;
+175&nbsp;&nbsp;        statement.executeBatch();
+176&nbsp;&nbsp;
+177&nbsp;&nbsp;        jlblStatus.setText(<span class = "literal">"Batch updates completed"</span>);
+178&nbsp;&nbsp;      }
+179&nbsp;&nbsp;      <span class = "keyword">else</span> {
+180&nbsp;&nbsp;        <span class = "comment">// Read a line and execute insert table command</span>
+181&nbsp;&nbsp;        <span class = "keyword">while</span> (input.hasNext()) {
+182&nbsp;&nbsp;          statement.executeUpdate(sqlInsert + input.nextLine() + <span class = "literal">")"</span>);
+183&nbsp;&nbsp;        }
+184&nbsp;&nbsp;
+185&nbsp;&nbsp;        jlblStatus.setText(<span class = "literal">"Single row update completed"</span>);
+186&nbsp;&nbsp;      }
+187&nbsp;&nbsp;    }
+188&nbsp;&nbsp;    <span class = "keyword">catch</span> (SQLException ex) {
+189&nbsp;&nbsp;      System.out.println(ex);
+190&nbsp;&nbsp;    }
+191&nbsp;&nbsp;    <span class = "keyword">catch</span> (FileNotFoundException ex) {
+192&nbsp;&nbsp;      System.out.println(<span class = "literal">"File not found: "</span> + filename);
+193&nbsp;&nbsp;    }
+194&nbsp;&nbsp;    <span class = "keyword">finally</span> {
+195&nbsp;&nbsp;      <span class = "keyword">if</span> (input != <span class = "keyword">null</span>) input.close();
+196&nbsp;&nbsp;    }
+197&nbsp;&nbsp;  }
+198&nbsp;&nbsp;
+199&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String args[]) {
+200&nbsp;&nbsp;    JFrame frame = <span class = "keyword">new</span> CopyFileToTable();
+201&nbsp;&nbsp;    frame.setTitle(<span class = "literal">"CopyFileToTable"</span>);
+202&nbsp;&nbsp;    frame.setSize(<span class = "literal">700</span>, <span class = "literal">200</span>);
+203&nbsp;&nbsp;    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+204&nbsp;&nbsp;    frame.setLocationRelativeTo(<span class = "keyword">null</span>);
+205&nbsp;&nbsp;    frame.setVisible(<span class = "keyword">true</span>);
+206&nbsp;&nbsp;  }
+207&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

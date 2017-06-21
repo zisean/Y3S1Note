@@ -1,0 +1,123 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - MultiThreadServer.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "MultiThreadServer.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.io.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.net.*;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> java.util.*;
+  4&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  5&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  6&nbsp;&nbsp;
+  7&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> MultiThreadServer <span class = "keyword">extends</span> JFrame {
+  8&nbsp;&nbsp;  <span class = "comment">// Text area for displaying contents</span>
+  9&nbsp;&nbsp;  <span class = "keyword">private</span> JTextArea jta = <span class = "keyword">new</span> JTextArea();
+ 10&nbsp;&nbsp;
+ 11&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+ 12&nbsp;&nbsp;    <span class = "keyword">new</span> MultiThreadServer();
+ 13&nbsp;&nbsp;  }
+ 14&nbsp;&nbsp;
+ 15&nbsp;&nbsp;  <span class = "keyword">public</span> MultiThreadServer() {
+ 16&nbsp;&nbsp;    <span class = "comment">// Place text area on the frame</span>
+ 17&nbsp;&nbsp;    setLayout(<span class = "keyword">new</span> BorderLayout());
+ 18&nbsp;&nbsp;    add(<span class = "keyword">new</span> JScrollPane(jta), BorderLayout.CENTER);
+ 19&nbsp;&nbsp;
+ 20&nbsp;&nbsp;    setTitle(<span class = "literal">"MultiThreadServer"</span>);
+ 21&nbsp;&nbsp;    setSize(<span class = "literal">500</span>, <span class = "literal">300</span>);
+ 22&nbsp;&nbsp;    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ 23&nbsp;&nbsp;    setVisible(<span class = "keyword">true</span>); <span class = "comment">// It is necessary to show the frame here!</span>
+ 24&nbsp;&nbsp;
+ 25&nbsp;&nbsp;    <span class = "keyword">try</span> {
+ 26&nbsp;&nbsp;      <span class = "comment">// Create a server socket</span>
+ 27&nbsp;&nbsp;      ServerSocket serverSocket = <span class = "keyword">new</span> ServerSocket(<span class = "literal">8000</span>);
+ 28&nbsp;&nbsp;      jta.append(<span class = "literal">"MultiThreadServer started at "</span> + <span class = "keyword">new</span> Date() + <span class = "literal">'\n'</span>);
+ 29&nbsp;&nbsp;
+ 30&nbsp;&nbsp;      <span class = "comment">// Number a client</span>
+ 31&nbsp;&nbsp;      <span class = "keyword">int</span> clientNo = <span class = "literal">1</span>;
+ 32&nbsp;&nbsp;
+ 33&nbsp;&nbsp;      <span class = "keyword">while</span> (<span class = "keyword">true</span>) {
+ 34&nbsp;&nbsp;        <span class = "comment">// Listen for a new connection request</span>
+ 35&nbsp;&nbsp;        Socket socket = serverSocket.accept();
+ 36&nbsp;&nbsp;
+ 37&nbsp;&nbsp;        <span class = "comment">// Display the client number</span>
+ 38&nbsp;&nbsp;        jta.append(<span class = "literal">"Starting thread for client "</span> + clientNo +
+ 39&nbsp;&nbsp;          <span class = "literal">" at "</span> + <span class = "keyword">new</span> Date() + <span class = "literal">'\n'</span>);
+ 40&nbsp;&nbsp;
+ 41&nbsp;&nbsp;        <span class = "comment">// Find the client's host name, and IP address</span>
+ 42&nbsp;&nbsp;        InetAddress inetAddress = socket.getInetAddress();
+ 43&nbsp;&nbsp;        jta.append(<span class = "literal">"Client "</span> + clientNo + <span class = "literal">"'s host name is "</span>
+ 44&nbsp;&nbsp;          + inetAddress.getHostName() + <span class = "literal">"\n"</span>);
+ 45&nbsp;&nbsp;        jta.append(<span class = "literal">"Client "</span> + clientNo + <span class = "literal">"'s IP Address is "</span>
+ 46&nbsp;&nbsp;          + inetAddress.getHostAddress() + <span class = "literal">"\n"</span>);
+ 47&nbsp;&nbsp;
+ 48&nbsp;&nbsp;        <span class = "comment">// Create a new thread for the connection</span>
+ 49&nbsp;&nbsp;        HandleAClient task = <span class = "keyword">new</span> HandleAClient(socket);
+ 50&nbsp;&nbsp;
+ 51&nbsp;&nbsp;        <span class = "comment">// Start the new thread</span>
+ 52&nbsp;&nbsp;        <span class = "keyword">new</span> Thread(task).start();
+ 53&nbsp;&nbsp;
+ 54&nbsp;&nbsp;        <span class = "comment">// Increment clientNo</span>
+ 55&nbsp;&nbsp;        clientNo++;
+ 56&nbsp;&nbsp;      }
+ 57&nbsp;&nbsp;    }
+ 58&nbsp;&nbsp;    <span class = "keyword">catch</span>(IOException ex) {
+ 59&nbsp;&nbsp;      System.err.println(ex);
+ 60&nbsp;&nbsp;    }
+ 61&nbsp;&nbsp;  }
+ 62&nbsp;&nbsp;
+ 63&nbsp;&nbsp;  <span class = "comment">// Inner class</span>
+ 64&nbsp;&nbsp;  <span class = "comment">// Define the thread class for handling new connection</span>
+ 65&nbsp;&nbsp;  <span class = "keyword">class</span> HandleAClient <span class = "keyword">implements</span> Runnable {
+ 66&nbsp;&nbsp;    <span class = "keyword">private</span> Socket socket; <span class = "comment">// A connected socket</span>
+ 67&nbsp;&nbsp;
+ 68&nbsp;&nbsp;    <span class = "comment">/** Construct a thread */</span>
+ 69&nbsp;&nbsp;    <span class = "keyword">public</span> HandleAClient(Socket socket) {
+ 70&nbsp;&nbsp;      <span class = "keyword">this</span>.socket = socket;
+ 71&nbsp;&nbsp;    }
+ 72&nbsp;&nbsp;
+ 73&nbsp;&nbsp;    <span class = "comment">/** Run a thread */</span>
+ 74&nbsp;&nbsp;    <span class = "keyword">public</span> <span class = "keyword">void</span> run() {
+ 75&nbsp;&nbsp;      <span class = "keyword">try</span> {
+ 76&nbsp;&nbsp;        <span class = "comment">// Create data input and output streams</span>
+ 77&nbsp;&nbsp;        DataInputStream inputFromClient = <span class = "keyword">new</span> DataInputStream(
+ 78&nbsp;&nbsp;          socket.getInputStream());
+ 79&nbsp;&nbsp;        DataOutputStream outputToClient = <span class = "keyword">new</span> DataOutputStream(
+ 80&nbsp;&nbsp;          socket.getOutputStream());
+ 81&nbsp;&nbsp;
+ 82&nbsp;&nbsp;        <span class = "comment">// Continuously serve the client</span>
+ 83&nbsp;&nbsp;        <span class = "keyword">while</span> (<span class = "keyword">true</span>) {
+ 84&nbsp;&nbsp;          <span class = "comment">// Receive radius from the client</span>
+ 85&nbsp;&nbsp;          <span class = "keyword">double</span> radius = inputFromClient.readDouble();
+ 86&nbsp;&nbsp;
+ 87&nbsp;&nbsp;          <span class = "comment">// Compute area</span>
+ 88&nbsp;&nbsp;          <span class = "keyword">double</span> area = radius * radius * Math.PI;
+ 89&nbsp;&nbsp;
+ 90&nbsp;&nbsp;          <span class = "comment">// Send area back to the client</span>
+ 91&nbsp;&nbsp;          outputToClient.writeDouble(area);
+ 92&nbsp;&nbsp;
+ 93&nbsp;&nbsp;          jta.append(<span class = "literal">"radius received from client: "</span> +
+ 94&nbsp;&nbsp;            radius + <span class = "literal">'\n'</span>);
+ 95&nbsp;&nbsp;          jta.append(<span class = "literal">"Area found: "</span> + area + <span class = "literal">'\n'</span>);
+ 96&nbsp;&nbsp;        }
+ 97&nbsp;&nbsp;      }
+ 98&nbsp;&nbsp;      <span class = "keyword">catch</span>(IOException e) {
+ 99&nbsp;&nbsp;        System.err.println(e);
+100&nbsp;&nbsp;      }
+101&nbsp;&nbsp;    }
+102&nbsp;&nbsp;  }
+103&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

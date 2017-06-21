@@ -1,0 +1,86 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E, Y. Daniel Liang - CheckBoxDemo.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+.lineNumberStyle {color: black}
+</style>
+</head>
+<body>
+<form action = "CheckBoxDemo.html" method = "get">
+<input type = "submit" value = "Show Code Without Line Numbers" />
+</form>
+<pre>
+  1&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.*;
+  2&nbsp;&nbsp;<span class = "keyword">import</span> java.awt.event.*;
+  3&nbsp;&nbsp;<span class = "keyword">import</span> javax.swing.*;
+  4&nbsp;&nbsp;
+  5&nbsp;&nbsp;<span class = "keyword">public</span> <span class = "keyword">class</span> CheckBoxDemo <span class = "keyword">extends</span> ButtonDemo {
+  6&nbsp;&nbsp;  <span class = "comment">// Create three check boxes to control the display of message</span>
+  7&nbsp;&nbsp;  <span class = "keyword">private</span> JCheckBox jchkCentered = <span class = "keyword">new</span> JCheckBox(<span class = "literal">"Centered"</span>);
+  8&nbsp;&nbsp;  <span class = "keyword">private</span> JCheckBox jchkBold = <span class = "keyword">new</span> JCheckBox(<span class = "literal">"Bold"</span>);
+  9&nbsp;&nbsp;  <span class = "keyword">private</span> JCheckBox jchkItalic = <span class = "keyword">new</span> JCheckBox(<span class = "literal">"Italic"</span>);
+ 10&nbsp;&nbsp;
+ 11&nbsp;&nbsp;  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+ 12&nbsp;&nbsp;    CheckBoxDemo frame = <span class = "keyword">new</span> CheckBoxDemo();
+ 13&nbsp;&nbsp;    frame.setTitle(<span class = "literal">"CheckBoxDemo"</span>);
+ 14&nbsp;&nbsp;    frame.setLocationRelativeTo(<span class = "keyword">null</span>); <span class = "comment">// Center the frame</span>
+ 15&nbsp;&nbsp;    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ 16&nbsp;&nbsp;    frame.setSize(<span class = "literal">500</span>, <span class = "literal">200</span>);
+ 17&nbsp;&nbsp;    frame.setVisible(<span class = "keyword">true</span>);
+ 18&nbsp;&nbsp;  }
+ 19&nbsp;&nbsp;
+ 20&nbsp;&nbsp;  <span class = "keyword">public</span> CheckBoxDemo() {
+ 21&nbsp;&nbsp;    <span class = "comment">// Set mnemonic keys</span>
+ 22&nbsp;&nbsp;    jchkCentered.setMnemonic(<span class = "literal">'C'</span>);
+ 23&nbsp;&nbsp;    jchkBold.setMnemonic(<span class = "literal">'B'</span>);
+ 24&nbsp;&nbsp;    jchkItalic.setMnemonic(<span class = "literal">'I'</span>);
+ 25&nbsp;&nbsp;
+ 26&nbsp;&nbsp;    <span class = "comment">// Create a new panel to hold check boxes</span>
+ 27&nbsp;&nbsp;    JPanel jpCheckBoxes = <span class = "keyword">new</span> JPanel();
+ 28&nbsp;&nbsp;    jpCheckBoxes.setLayout(<span class = "keyword">new</span> GridLayout(<span class = "literal">3</span>, <span class = "literal">1</span>));
+ 29&nbsp;&nbsp;    jpCheckBoxes.add(jchkCentered);
+ 30&nbsp;&nbsp;    jpCheckBoxes.add(jchkBold);
+ 31&nbsp;&nbsp;    jpCheckBoxes.add(jchkItalic);
+ 32&nbsp;&nbsp;    add(jpCheckBoxes, BorderLayout.EAST);
+ 33&nbsp;&nbsp;
+ 34&nbsp;&nbsp;    <span class = "comment">// Register listeners with the check boxes</span>
+ 35&nbsp;&nbsp;    jchkCentered.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 36&nbsp;&nbsp;      @Override
+ 37&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 38&nbsp;&nbsp;         messagePanel.setCentered(jchkCentered.isSelected());
+ 39&nbsp;&nbsp;      }
+ 40&nbsp;&nbsp;    });
+ 41&nbsp;&nbsp;    jchkBold.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 42&nbsp;&nbsp;      @Override
+ 43&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 44&nbsp;&nbsp;        setNewFont();
+ 45&nbsp;&nbsp;      }
+ 46&nbsp;&nbsp;    });
+ 47&nbsp;&nbsp;    jchkItalic.addActionListener(<span class = "keyword">new</span> ActionListener() {
+ 48&nbsp;&nbsp;      @Override
+ 49&nbsp;&nbsp;      <span class = "keyword">public</span> <span class = "keyword">void</span> actionPerformed(ActionEvent e) {
+ 50&nbsp;&nbsp;        setNewFont();
+ 51&nbsp;&nbsp;      }
+ 52&nbsp;&nbsp;    });
+ 53&nbsp;&nbsp;  }
+ 54&nbsp;&nbsp;
+ 55&nbsp;&nbsp;  <span class = "keyword">private</span> <span class = "keyword">void</span> setNewFont() {
+ 56&nbsp;&nbsp;    <span class = "comment">// Determine a font style</span>
+ 57&nbsp;&nbsp;    <span class = "keyword">int</span> fontStyle = Font.PLAIN;
+ 58&nbsp;&nbsp;    fontStyle += (jchkBold.isSelected() ? Font.BOLD : Font.PLAIN);
+ 59&nbsp;&nbsp;    fontStyle += (jchkItalic.isSelected() ? Font.ITALIC : Font.PLAIN);
+ 60&nbsp;&nbsp;
+ 61&nbsp;&nbsp;    <span class = "comment">// Set font for the message</span>
+ 62&nbsp;&nbsp;    Font font = messagePanel.getFont();
+ 63&nbsp;&nbsp;    messagePanel.setFont(
+ 64&nbsp;&nbsp;      <span class = "keyword">new</span> Font(font.getName(), fontStyle, font.getSize()));
+ 65&nbsp;&nbsp;  }
+ 66&nbsp;&nbsp;}
+</pre>
+</body>
+</html>

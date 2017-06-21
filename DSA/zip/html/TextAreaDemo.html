@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>Intro to Java Programming, 9E - TextAreaDemo.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<style type = "text/css">
+body {font-family: "Courier New", sans-serif; font-size: 100%; color: black}
+.keyword {color: #000080; font-weight: bold}
+.comment {color: gray}
+.literal {font-weight: bold; color: #3366FF}
+</style>
+</head>
+<body>
+<form action = "TextAreaDemoWithLineNumber.html" method = "get">
+<input type = "submit" value = "Show Code With Line Numbers" />
+</form>
+<pre>
+<span class = "keyword">import</span> java.awt.*;
+<span class = "keyword">import</span> javax.swing.*;
+
+<span class = "keyword">public</span> <span class = "keyword">class</span> TextAreaDemo <span class = "keyword">extends</span> JFrame {
+  <span class = "comment">// Declare and create a description panel</span>
+  <span class = "keyword">private</span> DescriptionPanel descriptionPanel = <span class = "keyword">new</span> DescriptionPanel();
+
+  <span class = "keyword">public</span> <span class = "keyword">static</span> <span class = "keyword">void</span> main(String[] args) {
+    TextAreaDemo frame = <span class = "keyword">new</span> TextAreaDemo();
+    frame.pack();
+    frame.setLocationRelativeTo(<span class = "keyword">null</span>); <span class = "comment">// Center the frame</span>
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    frame.setTitle(<span class = "literal">"TextAreaDemo"</span>);
+    frame.setVisible(<span class = "keyword">true</span>);
+  }
+
+  <span class = "keyword">public</span> TextAreaDemo() {
+    <span class = "comment">// Set title, text and image in the description panel</span>
+    descriptionPanel.setTitle(<span class = "literal">"Canada"</span>);
+    String description = <span class = "literal">"The Canadian national flag ..."</span>;
+    descriptionPanel.setImageIcon(<span class = "keyword">new</span> ImageIcon(<span class = "literal">"image/ca.gif"</span>));
+    descriptionPanel.setDescription(description);
+
+    <span class = "comment">// Add the description panel to the frame</span>
+    setLayout(<span class = "keyword">new</span> BorderLayout());
+    add(descriptionPanel, BorderLayout.CENTER);
+  }
+}
+</pre>
+</body>
+</html>
